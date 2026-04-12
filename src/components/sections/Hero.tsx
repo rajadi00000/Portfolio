@@ -67,7 +67,7 @@ const TerminalCard: React.FC = () => (
         <span className="code-line">
           {'  '}<span className="code-key">focus</span>
           <span className="code-colon">:</span>{' '}
-          <span className="code-bracket">['</span>
+          <span className="code-bracket">[</span>
           <span className="code-string">"iOS"</span>
           <span className="code-bracket">, </span>
           <span className="code-string">"Web"</span>
@@ -84,13 +84,13 @@ const TerminalCard: React.FC = () => (
         <span className="code-line">
           {'  '}<span className="code-key">experience</span>
           <span className="code-colon">:</span>{' '}
-          <span className="code-string">"3+ years"</span>
+          <span className="code-string">"3.5+ years"</span>
           <span className="code-bracket">,</span>
         </span>
         <span className="code-line">
           {'  '}<span className="code-key">awards</span>
           <span className="code-colon">:</span>{' '}
-          <span className="code-bracket">['</span>
+          <span className="code-bracket">[</span>
           <span className="code-string">"Q-Superstar"</span>
           <span className="code-bracket">],</span>
         </span>

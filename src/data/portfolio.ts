@@ -228,7 +228,7 @@ export const education: EducationInfo = {
   degree: "Bachelor's Degree in Engineering",
   institution: 'Delhi Technological University',
   location: 'Delhi, India',
-  year: '[Year]',
+  year: '2022',
 };
 
 // ─── Navigation ───────────────────────────────────────────────────────────────
