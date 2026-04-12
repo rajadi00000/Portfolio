@@ -4,57 +4,41 @@ import Section from '@/components/common/Section';
 import useScrollAnimation from '@/hooks/useScrollAnimation';
 import { personal } from '@/data/portfolio';
 
-// Contact detail rows: icon, label, value, and optional href
-const contactDetails = (p) => [
-  {
-    icon: <FiMapPin />,
-    label: 'Location',
-    value: p.location,
-    href: null,
-  },
-  {
-    icon: <FiMail />,
-    label: 'Email',
-    value: p.email,
-    href: `mailto:${p.email}`,
-  },
-  {
-    icon: <FiPhone />,
-    label: 'Phone',
-    value: p.phone,
-    href: `tel:${p.phone}`,
-  },
-  {
-    icon: <FiGithub />,
-    label: 'GitHub',
-    value: 'View Profile',
-    href: p.github,
-  },
-  {
-    icon: <FiLinkedin />,
-    label: 'LinkedIn',
-    value: 'View Profile',
-    href: p.linkedin,
-  },
+interface ContactDetailItem {
+  icon: React.ReactElement;
+  label: string;
+  value: string;
+  /** null → render as plain text; string → render as anchor */
+  href: string | null;
+}
+
+/** Build contact detail rows from the personal data object */
+const buildContactDetails = (p: typeof personal): ContactDetailItem[] => [
+  { icon: <FiMapPin />, label: 'Location', value: p.location, href: null },
+  { icon: <FiMail />,   label: 'Email',    value: p.email,    href: `mailto:${p.email}` },
+  { icon: <FiPhone />,  label: 'Phone',    value: p.phone,    href: `tel:${p.phone}` },
+  { icon: <FiGithub />, label: 'GitHub',   value: 'View Profile', href: p.github },
+  { icon: <FiLinkedin />, label: 'LinkedIn', value: 'View Profile', href: p.linkedin },
 ];
 
 /**
  * About
  *
  * Two-column layout:
- * - Left: professional summary paragraph
- * - Right: contact/detail card list (email, location, GitHub, LinkedIn)
+ * - Left:  professional summary paragraph
+ * - Right: contact / detail card list
  *
- * Both columns animate in from below when scrolled into view.
+ * Both columns animate from below when scrolled into view.
  */
-const About = () => {
+const About: React.FC = () => {
   const { ref: leftRef, isInView: leftInView, variants } = useScrollAnimation({ stagger: 0.08 });
-  const { ref: rightRef, isInView: rightInView, variants: rightVariants } = useScrollAnimation({
-    stagger: 0.07,
-    delay: 0.1,
-  });
+  const {
+    ref: rightRef,
+    isInView: rightInView,
+    variants: rightVariants,
+  } = useScrollAnimation({ stagger: 0.07, delay: 0.1 });
 
-  const details = contactDetails(personal);
+  const details = buildContactDetails(personal);
 
   return (
     <Section
@@ -67,7 +51,7 @@ const About = () => {
       <div className="about__grid">
         {/* Summary column */}
         <motion.div
-          ref={leftRef}
+          ref={leftRef as React.RefObject<HTMLDivElement>}
           variants={variants.container}
           initial="hidden"
           animate={leftInView ? 'visible' : 'hidden'}
@@ -79,7 +63,7 @@ const About = () => {
 
         {/* Contact details column */}
         <motion.div
-          ref={rightRef}
+          ref={rightRef as React.RefObject<HTMLDivElement>}
           className="about__details-card"
           variants={rightVariants.container}
           initial="hidden"

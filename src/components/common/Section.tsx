@@ -1,39 +1,53 @@
 import { motion } from 'framer-motion';
 import useScrollAnimation from '@/hooks/useScrollAnimation';
 
+interface SectionProps {
+  /** HTML `id` used as anchor target for smooth-scroll navigation */
+  id: string;
+  /** Small mono uppercase label rendered above the title */
+  label?: string;
+  /** Main section heading */
+  title?: string;
+  /** Optional subtitle paragraph */
+  subtitle?: string;
+  /** Use the alternate background stripe defined in globals.css */
+  alt?: boolean;
+  /** Extra className forwarded to the `<section>` element */
+  className?: string;
+  children: React.ReactNode;
+}
+
 /**
  * Section
  *
- * Reusable section wrapper that provides:
+ * Reusable section wrapper providing:
  * - Consistent vertical padding and layout
  * - Optional alternate background stripe
- * - Animated section header (label → title → subtitle)
- * - Scroll-triggered fade-up reveal for the header
- *
- * @param {Object}  props
- * @param {string}  props.id          - HTML id for anchor navigation
- * @param {string}  [props.label]     - Small mono uppercase label above title
- * @param {string}  [props.title]     - Main section heading
- * @param {string}  [props.subtitle]  - Optional subtitle paragraph
- * @param {boolean} [props.alt=false] - Use alternate background colour
- * @param {string}  [props.className] - Extra className for the section element
- * @param {React.ReactNode} props.children - Section body content
+ * - Scroll-triggered animated header (label → title → subtitle → divider)
  */
-const Section = ({ id, label, title, subtitle, alt = false, className = '', children }) => {
+const Section: React.FC<SectionProps> = ({
+  id,
+  label,
+  title,
+  subtitle,
+  alt = false,
+  className = '',
+  children,
+}) => {
   const { ref, isInView, variants } = useScrollAnimation({ delay: 0, stagger: 0.1 });
 
   const sectionClass = ['section', alt ? 'section--alt' : '', className]
     .filter(Boolean)
     .join(' ');
 
-  const hasHeader = label || title || subtitle;
+  const hasHeader = Boolean(label || title || subtitle);
 
   return (
     <section id={id} className={sectionClass}>
       <div className="container">
         {hasHeader && (
           <motion.div
-            ref={ref}
+            ref={ref as React.RefObject<HTMLDivElement>}
             className="section__header"
             variants={variants.container}
             initial="hidden"
@@ -54,7 +68,9 @@ const Section = ({ id, label, title, subtitle, alt = false, className = '', chil
                 {subtitle}
               </motion.p>
             )}
-            {title && <motion.div className="section__divider" variants={variants.item} />}
+            {title && (
+              <motion.div className="section__divider" variants={variants.item} />
+            )}
           </motion.div>
         )}
 

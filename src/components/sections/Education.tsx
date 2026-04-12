@@ -6,27 +6,24 @@ import { education } from '@/data/portfolio';
 /**
  * Education
  *
- * Displays the user's highest degree on a single centred card.
- * Animates in from below when scrolled into view.
+ * Displays the degree on a single centred card.
+ * Animates in from below when the section scrolls into view.
  */
-const Education = () => {
+const Education: React.FC = () => {
   const { ref, isInView, variants } = useScrollAnimation({ delay: 0.1 });
 
   return (
-    <Section
-      id="education"
-      label="Background"
-      title="Education"
-    >
+    <Section id="education" label="Background" title="Education">
       <motion.div
-        ref={ref}
+        ref={ref as React.RefObject<HTMLDivElement>}
         variants={variants.container}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
       >
         <motion.div className="education__card" variants={variants.item}>
-          <span className="education__icon" aria-hidden="true">🎓</span>
-
+          <span className="education__icon" aria-hidden="true">
+            🎓
+          </span>
           <div className="education__details">
             <h3 className="education__degree">{education.degree}</h3>
             <p className="education__institution">{education.institution}</p>

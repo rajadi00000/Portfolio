@@ -3,28 +3,29 @@ import Section from '@/components/common/Section';
 import Tag from '@/components/common/Tag';
 import useScrollAnimation from '@/hooks/useScrollAnimation';
 import { experiences } from '@/data/portfolio';
+import type { Experience, AnimationVariants } from '@/types';
+
+interface ExperienceItemProps {
+  experience: Experience;
+  variants: AnimationVariants;
+}
 
 /**
  * ExperienceItem
  *
- * Renders a single work-experience entry as a timeline card.
- * Includes the timeline dot, company/role header, bullet-point highlights,
+ * Renders a single work-experience entry inside the timeline.
+ * Includes the dot indicator, company/role header, bullet-point highlights,
  * and a footer row of technology tags.
- *
- * @param {Object} props
- * @param {Object} props.experience - Experience object from portfolio data
- * @param {Object} props.variants   - Framer Motion item variants
  */
-const ExperienceItem = ({ experience, variants }) => (
+const ExperienceItem: React.FC<ExperienceItemProps> = ({ experience, variants }) => (
   <motion.div className="experience__item" variants={variants.item}>
-    {/* Timeline dot — filled for current role */}
+    {/* Timeline dot — filled for the current role */}
     <span
       className={`experience__dot${experience.current ? ' experience__dot--current' : ''}`}
       aria-hidden="true"
     />
 
     <div className="experience__card">
-      {/* Role info & period */}
       <div className="experience__header">
         <div className="experience__role-info">
           <h3 className="experience__title">{experience.title}</h3>
@@ -41,7 +42,6 @@ const ExperienceItem = ({ experience, variants }) => (
         </div>
       </div>
 
-      {/* Bullet point highlights */}
       <ul className="experience__highlights" aria-label="Key responsibilities">
         {experience.highlights.map((point, index) => (
           <li key={index} className="experience__highlight">
@@ -51,7 +51,6 @@ const ExperienceItem = ({ experience, variants }) => (
         ))}
       </ul>
 
-      {/* Technology tags */}
       <div className="experience__tags" role="list" aria-label="Technologies used">
         {experience.tags.map((tag) => (
           <Tag key={tag} label={tag} variant="primary" />
@@ -65,9 +64,9 @@ const ExperienceItem = ({ experience, variants }) => (
  * Experience
  *
  * Vertical timeline of work history, newest first.
- * Items animate in with a stagger as the section scrolls into view.
+ * Items stagger in as the section scrolls into view.
  */
-const Experience = () => {
+const Experience: React.FC = () => {
   const { ref, isInView, variants } = useScrollAnimation({ stagger: 0.15, yOffset: 32 });
 
   return (
@@ -79,7 +78,7 @@ const Experience = () => {
       alt
     >
       <motion.div
-        ref={ref}
+        ref={ref as React.RefObject<HTMLDivElement>}
         className="experience__timeline"
         variants={variants.container}
         initial="hidden"

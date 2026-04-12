@@ -1,13 +1,23 @@
 /**
- * portfolio.js — Single source of truth for all portfolio content.
+ * portfolio.ts — Single source of truth for all portfolio content.
  *
- * Update this file to customize what's displayed on the site.
+ * Update this file to customise what is displayed on the site.
  * No component changes are needed for content edits.
  */
 
+import type {
+  PersonalInfo,
+  SkillCategory,
+  Experience,
+  Project,
+  Accomplishment,
+  EducationInfo,
+  NavLink,
+} from '@/types';
+
 // ─── Personal Info ────────────────────────────────────────────────────────────
 
-export const personal = {
+export const personal: PersonalInfo = {
   name: '[Your Name]',
   title: 'Software Engineer',
   tagline: 'Building for iOS · Web · AI',
@@ -23,7 +33,7 @@ export const personal = {
 // ─── Skills ───────────────────────────────────────────────────────────────────
 // Each category maps to a color variant defined in globals.css (.tag--{color})
 
-export const skills = [
+export const skills: SkillCategory[] = [
   {
     category: 'Languages',
     color: 'primary',
@@ -80,7 +90,7 @@ export const skills = [
 
 // ─── Work Experience ──────────────────────────────────────────────────────────
 
-export const experiences = [
+export const experiences: Experience[] = [
   {
     id: 1,
     title: 'Software Engineer / Research Technician',
@@ -114,7 +124,7 @@ export const experiences = [
 
 // ─── Projects ─────────────────────────────────────────────────────────────────
 
-export const projects = [
+export const projects: Project[] = [
   {
     id: 1,
     title: 'AI-Powered Multi-Agent Research Platform',
@@ -136,7 +146,7 @@ export const projects = [
     category: 'iOS / Mobile',
     tags: ['Swift', 'UIKit', 'BLE', 'iOS'],
     highlights: [
-      'Custom UI components & optimized sharing flows',
+      'Custom UI components & optimised sharing flows',
       'BLE hardware connectivity & state handling',
       'Advanced gesture navigation & camera integration',
     ],
@@ -184,11 +194,11 @@ export const projects = [
 
 // ─── Accomplishments ──────────────────────────────────────────────────────────
 
-export const accomplishments = [
+export const accomplishments: Accomplishment[] = [
   {
     id: 1,
     title: 'Quarterly Superstar Award',
-    description: 'Recognized for outstanding contribution to engineering and product delivery.',
+    description: 'Recognised for outstanding contribution to engineering and product delivery.',
     icon: '🏆',
   },
   {
@@ -213,7 +223,7 @@ export const accomplishments = [
 
 // ─── Education ────────────────────────────────────────────────────────────────
 
-export const education = {
+export const education: EducationInfo = {
   degree: "Bachelor's Degree in Engineering",
   institution: 'Delhi Technological University',
   location: 'Delhi, India',
@@ -223,7 +233,7 @@ export const education = {
 // ─── Navigation ───────────────────────────────────────────────────────────────
 // href values must match section element ids prefixed with '#'
 
-export const navLinks = [
+export const navLinks: NavLink[] = [
   { label: 'About', href: '#about' },
   { label: 'Skills', href: '#skills' },
   { label: 'Experience', href: '#experience' },

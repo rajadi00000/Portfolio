@@ -4,56 +4,58 @@ import { personal, navLinks } from '@/data/portfolio';
 import useActiveSection from '@/hooks/useActiveSection';
 
 // Derive section ids from nav links (strip leading '#')
-const sectionIds = navLinks.map((l) => l.href.slice(1));
+const sectionIds: string[] = navLinks.map((l) => l.href.slice(1));
 
 /**
  * Navbar
  *
  * Sticky top navigation bar that:
- * - Adds a frosted-glass background once the user scrolls past 20px
- * - Highlights the nav link corresponding to the visible section
- * - Collapses to a hamburger + fullscreen overlay on mobile (<768px)
+ * - Adds a frosted-glass background after scrolling past 20 px
+ * - Highlights the nav link for the currently visible section
+ * - Collapses to a hamburger + fullscreen overlay on mobile (<768 px)
  * - Smooth-scrolls to sections on link click
  */
-const Navbar = () => {
-  const [scrolled, setScrolled]   = useState(false);
-  const [menuOpen, setMenuOpen]   = useState(false);
-  const activeSection             = useActiveSection(sectionIds);
+const Navbar: React.FC = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const activeSection = useActiveSection(sectionIds);
 
-  // Track scroll position for background reveal
+  // Reveal frosted-glass background on scroll
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = (): void => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close mobile menu on resize to desktop width
+  // Close mobile menu when viewport widens to desktop breakpoint
   useEffect(() => {
-    const onResize = () => {
+    const onResize = (): void => {
       if (window.innerWidth >= 768) setMenuOpen(false);
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // Prevent body scroll when menu is open
+  // Prevent body scroll while mobile menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [menuOpen]);
 
-  /** Smooth-scroll to a section and close mobile menu */
-  const handleNavClick = useCallback((e, href) => {
-    e.preventDefault();
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    setMenuOpen(false);
-  }, []);
+  /** Smooth-scroll to a section by href and close mobile menu */
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string): void => {
+      e.preventDefault();
+      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setMenuOpen(false);
+    },
+    []
+  );
 
-  /** Smooth-scroll to top (brand click) */
-  const handleBrandClick = useCallback(() => {
+  /** Smooth-scroll to the top of the page */
+  const handleBrandClick = useCallback((): void => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setMenuOpen(false);
   }, []);
@@ -98,11 +100,7 @@ const Navbar = () => {
           </ul>
 
           {/* Desktop CTA */}
-          <a
-            href={`mailto:${personal.email}`}
-            className="navbar__cta"
-            aria-label="Send an email"
-          >
+          <a href={`mailto:${personal.email}`} className="navbar__cta" aria-label="Send an email">
             Contact
           </a>
 
@@ -120,7 +118,7 @@ const Navbar = () => {
         </div>
       </motion.nav>
 
-      {/* Mobile fullscreen menu */}
+      {/* Mobile fullscreen overlay */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div

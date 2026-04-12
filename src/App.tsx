@@ -11,29 +11,25 @@ import Education from '@/components/sections/Education';
 /**
  * App — Root component.
  *
- * Composes the full portfolio page in a logical narrative order:
- *   Navbar → Hero → About → Skills → Experience → Projects → Accomplishments → Education → Footer
+ * Composes the full portfolio page in narrative order:
+ * Navbar → Hero → About → Skills → Experience → Projects → Accomplishments → Education → Footer
  *
- * All section ids must match the `href` values in `data/portfolio.js` (navLinks).
+ * All section `id` values must match the `href` values in `data/portfolio.ts` (navLinks).
  */
-const App = () => {
-  return (
-    <>
-      <Navbar />
-
-      <main id="main-content">
-        <Hero />
-        <About />
-        <Skills />
-        <Experience />
-        <Projects />
-        <Accomplishments />
-        <Education />
-      </main>
-
-      <Footer />
-    </>
-  );
-};
+const App: React.FC = () => (
+  <>
+    <Navbar />
+    <main id="main-content">
+      <Hero />
+      <About />
+      <Skills />
+      <Experience />
+      <Projects />
+      <Accomplishments />
+      <Education />
+    </main>
+    <Footer />
+  </>
+);
 
 export default App;

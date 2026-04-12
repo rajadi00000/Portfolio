@@ -2,19 +2,20 @@ import { motion } from 'framer-motion';
 import Section from '@/components/common/Section';
 import useScrollAnimation from '@/hooks/useScrollAnimation';
 import { accomplishments } from '@/data/portfolio';
+import type { Accomplishment, AnimationVariants } from '@/types';
+
+interface AccomplishmentCardProps {
+  item: Accomplishment;
+  variants: AnimationVariants;
+}
 
 /**
  * AccomplishmentCard
  *
- * Displays a single recognition/achievement with an icon, title,
- * and short description. A top-border gradient reveal on hover
- * is handled by CSS (`.accomplishment-card::before`).
- *
- * @param {Object} props
- * @param {Object} props.item     - Accomplishment object from portfolio data
- * @param {Object} props.variants - Framer Motion item variants
+ * Displays a single recognition or achievement with an emoji icon, title,
+ * and description. A top-border gradient is revealed on hover via CSS.
  */
-const AccomplishmentCard = ({ item, variants }) => (
+const AccomplishmentCard: React.FC<AccomplishmentCardProps> = ({ item, variants }) => (
   <motion.article
     className="accomplishment-card"
     variants={variants.item}
@@ -32,9 +33,9 @@ const AccomplishmentCard = ({ item, variants }) => (
  * Accomplishments
  *
  * Grid of key achievements, awards, and recognitions.
- * Cards stagger into view when the section is scrolled to.
+ * Cards stagger in when the section scrolls into view.
  */
-const Accomplishments = () => {
+const Accomplishments: React.FC = () => {
   const { ref, isInView, variants } = useScrollAnimation({ stagger: 0.1, delay: 0.05 });
 
   return (
@@ -46,7 +47,7 @@ const Accomplishments = () => {
       alt
     >
       <motion.div
-        ref={ref}
+        ref={ref as React.RefObject<HTMLDivElement>}
         className="accomplishments__grid"
         variants={variants.container}
         initial="hidden"

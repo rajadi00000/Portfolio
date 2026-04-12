@@ -27,26 +27,24 @@ const visualVariants = {
   },
 };
 
-// ─── Terminal code card content ───────────────────────────────────────────────
+// ─── Terminal code card ───────────────────────────────────────────────────────
 
 /**
  * TerminalCard
  *
- * Decorative code-editor-style card shown on the right side of the Hero.
- * Uses semantic <code> and <span> elements with CSS classes for syntax
- * highlighting — no external library required.
+ * Decorative code-editor card shown on the right side of the Hero.
+ * Syntax highlighting is achieved with CSS classes — no external library.
  */
-const TerminalCard = () => (
+const TerminalCard: React.FC = () => (
   <div className="terminal-card" role="img" aria-label="Code snippet about the developer">
-    {/* macOS-style window chrome */}
+    {/* macOS window chrome */}
     <div className="terminal-card__topbar">
-      <span className="terminal-card__dot terminal-card__dot--red"   aria-hidden="true" />
+      <span className="terminal-card__dot terminal-card__dot--red"    aria-hidden="true" />
       <span className="terminal-card__dot terminal-card__dot--yellow" aria-hidden="true" />
       <span className="terminal-card__dot terminal-card__dot--green"  aria-hidden="true" />
-      <span className="terminal-card__filename">developer.js</span>
+      <span className="terminal-card__filename">developer.ts</span>
     </div>
 
-    {/* Pseudo-highlighted code body */}
     <div className="terminal-card__body">
       <code>
         <span className="code-line">
@@ -54,21 +52,18 @@ const TerminalCard = () => (
           <span className="code-var">developer</span>{' '}
           <span className="code-bracket">= {'{'}</span>
         </span>
-
         <span className="code-line">
           {'  '}<span className="code-key">name</span>
           <span className="code-colon">:</span>{' '}
           <span className="code-string">"{personal.name}"</span>
           <span className="code-bracket">,</span>
         </span>
-
         <span className="code-line">
           {'  '}<span className="code-key">role</span>
           <span className="code-colon">:</span>{' '}
           <span className="code-string">"{personal.title}"</span>
           <span className="code-bracket">,</span>
         </span>
-
         <span className="code-line">
           {'  '}<span className="code-key">focus</span>
           <span className="code-colon">:</span>{' '}
@@ -80,21 +75,18 @@ const TerminalCard = () => (
           <span className="code-string">"AI"</span>
           <span className="code-bracket">],</span>
         </span>
-
         <span className="code-line">
           {'  '}<span className="code-key">company</span>
           <span className="code-colon">:</span>{' '}
           <span className="code-string">"Adidas"</span>
           <span className="code-bracket">,</span>
         </span>
-
         <span className="code-line">
           {'  '}<span className="code-key">experience</span>
           <span className="code-colon">:</span>{' '}
           <span className="code-string">"3+ years"</span>
           <span className="code-bracket">,</span>
         </span>
-
         <span className="code-line">
           {'  '}<span className="code-key">awards</span>
           <span className="code-colon">:</span>{' '}
@@ -102,20 +94,16 @@ const TerminalCard = () => (
           <span className="code-string">"Q-Superstar"</span>
           <span className="code-bracket">],</span>
         </span>
-
         <span className="code-line">
           {'  '}<span className="code-key">passion</span>
           <span className="code-colon">:</span>{' '}
           <span className="code-string">"Build things that matter"</span>
           <span className="code-bracket">,</span>
         </span>
-
         <span className="code-line">
           <span className="code-bracket">{'}'}</span>
           <span className="code-bracket">;</span>
         </span>
-
-        {/* Simulated cursor */}
         <span className="code-line">
           <span className="code-cursor" aria-hidden="true" />
         </span>
@@ -129,23 +117,13 @@ const TerminalCard = () => (
 /**
  * Hero
  *
- * Full-viewport landing section with:
- * - Staggered text animation (eyebrow → name → title → summary → actions)
- * - Social icon links
- * - Animated terminal code card decoration
- * - Scroll-down indicator
+ * Full-viewport landing section with staggered text animations,
+ * social icon links, a floating terminal card, and a scroll indicator.
  */
-const Hero = () => {
-  const handleContactClick = (e) => {
+const Hero: React.FC = () => {
+  const scrollTo = (id: string) => (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
     e.preventDefault();
-    const section = document.getElementById('about');
-    if (section) section.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleProjectsClick = (e) => {
-    e.preventDefault();
-    const section = document.getElementById('projects');
-    if (section) section.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -159,49 +137,39 @@ const Hero = () => {
             initial="hidden"
             animate="visible"
           >
-            {/* Availability eyebrow */}
             <motion.div className="hero__eyebrow" variants={itemVariants}>
               <span className="hero__eyebrow-dot" aria-hidden="true" />
               Available for opportunities
             </motion.div>
 
-            {/* Name */}
             <motion.h1 className="hero__name" variants={itemVariants}>
               {personal.name}
             </motion.h1>
 
-            {/* Title */}
             <motion.p className="hero__title" variants={itemVariants}>
               {personal.title}
             </motion.p>
 
-            {/* Tagline / summary */}
             <motion.p className="hero__summary" variants={itemVariants}>
               {personal.summary}
             </motion.p>
 
-            {/* Location */}
             <motion.span className="hero__location" variants={itemVariants}>
               <FiMapPin aria-hidden="true" />
               {personal.location}
             </motion.span>
 
-            {/* CTA buttons */}
             <motion.div className="hero__actions" variants={itemVariants}>
-              <button className="btn btn--primary" onClick={handleProjectsClick}>
+              <button className="btn btn--primary" onClick={scrollTo('projects')}>
                 View My Work
                 <FiArrowRight aria-hidden="true" />
               </button>
-              <a
-                href={`mailto:${personal.email}`}
-                className="btn btn--outline"
-              >
+              <a href={`mailto:${personal.email}`} className="btn btn--outline">
                 <FiMail aria-hidden="true" />
                 Get in Touch
               </a>
             </motion.div>
 
-            {/* Social links */}
             <motion.nav
               className="hero__socials"
               variants={itemVariants}
@@ -247,7 +215,6 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll down indicator */}
       <div className="hero__scroll-indicator" aria-hidden="true">
         <div className="hero__scroll-arrow" />
         <span>scroll</span>
