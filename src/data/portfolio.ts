@@ -93,9 +93,9 @@ export const skills: SkillCategory[] = [
 export const experiences: Experience[] = [
   {
     id: 1,
-    title: 'Software Engineer / Research Technician',
+    title: 'Software Engineer',
     company: 'Adidas — India Tech Hub',
-    period: 'Jun 2022 – Present',
+    period: 'Jan 2025 – Present',
     current: true,
     highlights: [
       'Contributed to enterprise architecture and innovation within the R&D Hub, building internal digital platforms and scalable software solutions.',
@@ -110,9 +110,9 @@ export const experiences: Experience[] = [
   },
   {
     id: 2,
-    title: 'Junior Software Engineer (ACE Program)',
+    title: 'Junior Software Engineer',
     company: 'Adidas',
-    period: 'Jun 2022 – Oct 2022',
+    period: 'Jun 2022 - Dec 2024',
     current: false,
     highlights: [
       'Completed structured engineering onboarding focused on frontend engineering standards, enterprise practices, and product delivery.',
