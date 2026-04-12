@@ -14,6 +14,7 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: github-pages  # load variables/secrets scoped to this environment
 
     steps:
       # 1. Check out the repository
