@@ -16,18 +16,19 @@ import type {
 } from '@/types';
 
 // ─── Personal Info ────────────────────────────────────────────────────────────
+// Values are read from VITE_* environment variables (see .env.local / .env.example).
+// Fallback strings are shown in development if the variable is not set.
 
 export const personal: PersonalInfo = {
-  name: '[Your Name]',
-  title: 'Software Engineer',
-  tagline: 'Building for iOS · Web · AI',
-  summary:
-    'Results-driven Software Engineer with ~3+ years of experience in mobile, web, and AI-powered product development. Proven background in iOS engineering, frontend web applications, admin platforms, and multi-agent AI systems within enterprise and sports-tech environments. Strong track record of delivering scalable solutions, improving user experience, and driving innovation across cross-functional teams.',
-  location: 'Ghaziabad, India',
-  email: '[Email Address]',
-  phone: '[Phone Number]',
-  linkedin: '[LinkedIn URL]',
-  github: '[GitHub URL]',
+  name:     import.meta.env.VITE_NAME     || '[Your Name]',
+  title:    import.meta.env.VITE_TITLE    || 'Software Engineer',
+  tagline:  import.meta.env.VITE_TAGLINE  || 'Building for iOS · Web · AI',
+  summary:  import.meta.env.VITE_SUMMARY  || '',
+  location: import.meta.env.VITE_LOCATION || 'India',
+  email:    import.meta.env.VITE_EMAIL    || 'you@example.com',
+  phone:    import.meta.env.VITE_PHONE    || '',
+  linkedin: import.meta.env.VITE_LINKEDIN || '#',
+  github:   import.meta.env.VITE_GITHUB   || '#',
 };
 
 // ─── Skills ───────────────────────────────────────────────────────────────────
