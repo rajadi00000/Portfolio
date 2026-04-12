@@ -1,0 +1,59 @@
+name: Deploy Portfolio to GitHub Pages
+
+on:
+  # Runs on every push to the main branch
+  push:
+    branches: [main]
+  # Allows manual trigger from the Actions tab
+  workflow_dispatch:
+
+# Grant GITHUB_TOKEN permission to push to gh-pages branch
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the repository
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Set up Node.js (matches the version used locally)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Build the site
+      #    VITE_BASE_PATH tells Vite to prefix all asset URLs with the repo name.
+      #    VITE_* personal-info variables come from repository secrets
+      #    (Settings → Secrets and variables → Actions).
+      - name: Build
+        env:
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          VITE_NAME:      ${{ secrets.VITE_NAME }}
+          VITE_TITLE:     ${{ secrets.VITE_TITLE }}
+          VITE_TAGLINE:   ${{ secrets.VITE_TAGLINE }}
+          VITE_SUMMARY:   ${{ secrets.VITE_SUMMARY }}
+          VITE_LOCATION:  ${{ secrets.VITE_LOCATION }}
+          VITE_EMAIL:     ${{ secrets.VITE_EMAIL }}
+          VITE_PHONE:     ${{ secrets.VITE_PHONE }}
+          VITE_LINKEDIN:  ${{ secrets.VITE_LINKEDIN }}
+          VITE_GITHUB:    ${{ secrets.VITE_GITHUB }}
+        run: npm run build
+
+      # 5. Deploy the dist/ folder to the gh-pages branch
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          # Keeps a clean gh-pages branch on every deploy
+          force_orphan: true
