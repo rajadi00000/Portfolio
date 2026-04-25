@@ -342,3 +342,94 @@
   box-shadow: 0 8px 28px rgba(129, 140, 248, 0.55);
 }
 
+/* ─── 31. Mobile Carousel ─────────────────────────────────────────────────── */
+
+.mobile-carousel {
+  position: relative;
+}
+
+/* Swipe hint badge — floats at the vertical centre of the right edge */
+.mobile-carousel__hint {
+  position: absolute;
+  top: 50%;
+  right: var(--space-3);
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+  background: rgba(129, 140, 248, 0.1);
+  border: 1px solid rgba(129, 140, 248, 0.22);
+  padding: 5px 11px 5px 9px;
+  border-radius: var(--radius-full);
+  pointer-events: none;
+  z-index: 10;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
+  box-shadow: 0 2px 12px rgba(129, 140, 248, 0.15);
+}
+
+.mobile-carousel__track {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding: var(--space-2) 0 var(--space-5);
+}
+
+.mobile-carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Each slide is narrower than 100vw so the next card peeks at the right */
+.mobile-carousel__slide-wrapper {
+  flex: 0 0 84vw;
+  scroll-snap-align: start;
+}
+
+/* Inner shell — CSS handles the active/inactive depth effect */
+.mobile-carousel__slide {
+  height: 100%;
+  transform: scale(0.94);
+  opacity: 0.6;
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.35s ease;
+  transform-origin: center top;
+}
+
+.mobile-carousel__slide--active {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Pagination dots row */
+.mobile-carousel__dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--space-4);
+}
+
+/* Each dot is a pill-shaped button; Framer Motion animates its width */
+.mobile-carousel__dot {
+  height: 6px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  background: var(--color-text-muted);
+}
+
+.mobile-carousel__dot--active {
+  background: var(--color-primary);
+  box-shadow: 0 0 10px rgba(129, 140, 248, 0.55);
+}
+

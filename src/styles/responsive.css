@@ -57,8 +57,37 @@
     display: flex;
   }
 
+  /* ── Fix 1: hide scroll indicator — it overlaps hero content on mobile ── */
+  .hero__scroll-indicator {
+    display: none;
+  }
+
+  /* ── Fix 2: add bottom breathing room so marquee doesn't butt directly
+        against the hero content's last element ── */
+  .hero {
+    padding-bottom: var(--space-10);
+  }
+
+  /* ── Fix 3a: give the projects scroll-track top padding so box-shadow /
+        translateY(-4px) on tap isn't clipped by overflow ── */
   .projects__grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    gap: var(--space-4);
+    padding-top: 8px;    /* room for upward card lift */
+    padding-bottom: var(--space-4);
+  }
+
+  .projects__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Each project card snaps to start; peeks next card at right */
+  .projects__grid > * {
+    flex: 0 0 84vw;
+    scroll-snap-align: start;
   }
 
   .accomplishments__grid {
@@ -119,5 +148,16 @@
 
   .hero__stats {
     gap: var(--space-5);
+  }
+}
+
+/* ── Fix 3b: on true touch devices (no hover) disable the translateY lift
+      on cards — eliminates overflow-clipping for cards inside scroll tracks ── */
+@media (hover: none) {
+  .project-card:hover,
+  .accomplishment-card:hover,
+  .experience__card:hover,
+  .card--hoverable:hover {
+    transform: none;
   }
 }

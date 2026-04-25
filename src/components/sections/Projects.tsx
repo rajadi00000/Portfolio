@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Section from '@/components/common/Section';
 import Tag from '@/components/common/Tag';
@@ -34,7 +34,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => (
       ))}
     </ul>
 
-    <div className="project-card__tags" role="list" aria-label="Technologies used">
+    <div className="project-card__tags" aria-label="Technologies used">
       {project.tags.map((tag) => (
         <Tag key={tag} label={tag} variant="default" />
       ))}
@@ -52,6 +52,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => (
 const Projects: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>(ALL_LABEL);
   const { ref, isInView, variants } = useScrollAnimation({ stagger: 0.06 });
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  const handleFilter = (cat: string) => {
+    setActiveFilter(cat);
+    // Scroll carousel back to start when filter changes on mobile
+    if (gridRef.current) {
+      gridRef.current.scrollLeft = 0;
+    }
+  };
 
   // Derive unique category labels — keeps insertion order
   const categories = useMemo<string[]>(
@@ -89,7 +98,7 @@ const Projects: React.FC = () => {
           <motion.button
             key={cat}
             className={`projects__filter-btn${activeFilter === cat ? ' projects__filter-btn--active' : ''}`}
-            onClick={() => setActiveFilter(cat)}
+            onClick={() => handleFilter(cat)}
             variants={variants.item}
             aria-pressed={activeFilter === cat}
           >
@@ -99,7 +108,7 @@ const Projects: React.FC = () => {
       </motion.div>
 
       {/* Project grid */}
-      <motion.div className="projects__grid" layout role="list" aria-label="Project list">
+      <motion.div ref={gridRef} className="projects__grid" layout role="list" aria-label="Project list">
         <AnimatePresence mode="popLayout">
           {filtered.map((project) => (
             <motion.div
