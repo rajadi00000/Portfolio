@@ -277,16 +277,6 @@ const s = StyleSheet.create({
   accomplishDesc: { fontSize: 7.5, color: C.muted, lineHeight: 1.45 },
 });
 
-// ─── Single-page content limits ───────────────────────────────────────────────
-// Tune these if the resume overflows or has too much whitespace.
-const LIMITS = {
-  currentRoleHighlights: 5,   // bullets for the current/most-recent role
-  otherRoleHighlights:   2,   // bullets for older roles
-  projects:              2,   // how many projects to show
-  projectHighlights:     2,   // bullets per project
-  accomplishments:       4,   // rows in the sidebar
-};
-
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function BulletList({ items }: { items: string[] }) {
   return (
@@ -309,28 +299,14 @@ function ContactSeparator() {
 export default function ResumePDF({ data }: { data?: ResumeData }) {
   // Use override data if supplied, otherwise fall back to portfolio defaults.
   // Original portfolio data is never mutated.
-  const personal       = data?.personal       ?? _personal;
-  const skills         = data?.skills         ?? _skills;
-  const experiences    = data?.experiences    ?? _experiences;
-  const projects       = data?.projects       ?? _projects;
-  const education      = data?.education      ?? _education;
+  const personal        = data?.personal        ?? _personal;
+  const skills          = data?.skills          ?? _skills;
+  const experiences     = data?.experiences     ?? _experiences;
+  const projects        = data?.projects        ?? _projects;
+  const education       = data?.education       ?? _education;
   const accomplishments = data?.accomplishments ?? _accomplishments;
 
-  const expItems = experiences.map((exp, i) => ({
-    ...exp,
-    highlights: exp.highlights.slice(
-      0,
-      i === 0 ? LIMITS.currentRoleHighlights : LIMITS.otherRoleHighlights
-    ),
-  }));
-
-  const topProjects = projects.slice(0, LIMITS.projects).map((p) => ({
-    ...p,
-    highlights: p.highlights.slice(0, LIMITS.projectHighlights),
-  }));
-
   const sidebarSkills = skills.filter((sk) => sk.category !== 'Soft Skills');
-  const topAccomplishments = accomplishments.slice(0, LIMITS.accomplishments);
 
   const hasLinkedin = personal.linkedin && personal.linkedin !== '#';
   const hasGithub   = personal.github   && personal.github   !== '#';
@@ -391,8 +367,8 @@ export default function ResumePDF({ data }: { data?: ResumeData }) {
           <Text style={s.summary}>{personal.summary}</Text>
         )}
 
-        {/* ── Two-column body — flexGrow fills remaining page height ── */}
-        <View style={{ ...s.body, flexGrow: 1 }}>
+        {/* ── Two-column body — flows across pages as needed ── */}
+        <View style={s.body}>
 
           {/* ════ Main column (62%) ════ */}
           <View style={s.mainCol}>
@@ -400,7 +376,7 @@ export default function ResumePDF({ data }: { data?: ResumeData }) {
             {/* Work Experience */}
             <View style={s.section}>
               <Text style={s.sectionTitle}>Work Experience</Text>
-              {expItems.map((exp) => (
+              {experiences.map((exp) => (
                 <View key={exp.id} style={s.expEntry}>
                   <View style={s.expHeader}>
                     <View style={s.expTitleRow}>
@@ -427,7 +403,7 @@ export default function ResumePDF({ data }: { data?: ResumeData }) {
             {/* Key Projects */}
             <View style={s.section}>
               <Text style={s.sectionTitle}>Key Projects</Text>
-              {topProjects.map((proj) => (
+              {projects.map((proj) => (
                 <View key={proj.id} style={s.projEntry}>
                   <View style={s.projHeader}>
                     <Text style={s.projTitle}>{proj.title}</Text>
@@ -475,7 +451,7 @@ export default function ResumePDF({ data }: { data?: ResumeData }) {
             {/* Accomplishments */}
             <View style={s.section}>
               <Text style={s.sectionTitle}>Accomplishments</Text>
-              {topAccomplishments.map((acc) => (
+              {accomplishments.map((acc) => (
                 <View key={acc.id} style={s.accomplishRow}>
                   <Text style={s.accomplishDot}>*</Text>
                   <View style={s.accomplishContent}>
