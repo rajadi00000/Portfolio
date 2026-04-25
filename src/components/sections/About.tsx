@@ -19,7 +19,7 @@ const buildContactDetails = (p: typeof personal): ContactDetailItem[] => [
   { icon: <FiPhone />,  label: 'Phone',    value: p.phone,    href: `tel:${p.phone}` },
   { icon: <FiGithub />, label: 'GitHub',   value: 'View Profile', href: p.github },
   { icon: <FiLinkedin />, label: 'LinkedIn', value: 'View Profile', href: p.linkedin },
-];
+].filter(({ value }) => Boolean(value));
 
 /**
  * About
