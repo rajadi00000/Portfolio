@@ -34,33 +34,33 @@ const C = {
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const s = StyleSheet.create({
-  // Page — tight margins to maximise usable area
+  // Page — comfortable margins, fills full A4
   page: {
     fontFamily: 'Helvetica',
     backgroundColor: '#FFFFFF',
-    paddingTop: 26,
-    paddingBottom: 22,
-    paddingHorizontal: 32,
-    fontSize: 8.5,
+    paddingTop: 32,
+    paddingBottom: 28,
+    paddingHorizontal: 36,
+    fontSize: 9,
     color: C.text,
-    lineHeight: 1.38,
+    lineHeight: 1.5,
   },
 
   // Header
   header: {
-    marginBottom: 8,
+    marginBottom: 10,
     borderBottomWidth: 1.5,
     borderBottomColor: C.primary,
-    paddingBottom: 7,
+    paddingBottom: 9,
   },
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    marginBottom: 4,
+    marginBottom: 5,
   },
   name: {
-    fontSize: 20,
+    fontSize: 22,
     fontFamily: 'Helvetica-Bold',
     color: C.text,
     letterSpacing: 0.3,
@@ -69,57 +69,60 @@ const s = StyleSheet.create({
     textAlign: 'right',
   },
   title: {
-    fontSize: 9.5,
+    fontSize: 10,
     color: C.primary,
     fontFamily: 'Helvetica-Bold',
     letterSpacing: 0.2,
   },
   tagline: {
-    fontSize: 7.5,
+    fontSize: 8,
     color: C.muted,
-    marginTop: 1,
+    marginTop: 2,
   },
   contactRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignItems: 'center',
+    marginTop: 8,
   },
   contactSep: {
-    fontSize: 7.5,
+    fontSize: 8,
     color: C.muted,
-    marginHorizontal: 5,
+    marginHorizontal: 6,
   },
   contactItem: {
-    fontSize: 7.5,
+    fontSize: 8,
     color: C.muted,
   },
   contactLink: {
-    fontSize: 7.5,
+    fontSize: 8,
     color: C.primary,
     textDecoration: 'none',
   },
 
-  // Two-column body
+  // Two-column body — fills full remaining height
   body: {
     flexDirection: 'row',
-    gap: 14,
+    gap: 18,
+    flexGrow: 1,
   },
   mainCol: { flex: 62 },
   sideCol: {
     flex: 36,
     borderLeftWidth: 0.75,
     borderLeftColor: C.border,
-    paddingLeft: 12,
+    paddingLeft: 14,
   },
 
   // Section
-  section: { marginBottom: 9 },
+  section: { marginBottom: 11 },
   sectionTitle: {
-    fontSize: 8,
+    fontSize: 8.5,
     fontFamily: 'Helvetica-Bold',
     color: C.primary,
     textTransform: 'uppercase',
     letterSpacing: 1.2,
-    marginBottom: 4,
+    marginBottom: 5,
     paddingBottom: 2,
     borderBottomWidth: 0.5,
     borderBottomColor: C.border,
@@ -127,135 +130,136 @@ const s = StyleSheet.create({
 
   // Summary
   summary: {
-    fontSize: 8,
+    fontSize: 8.5,
     color: C.text,
-    lineHeight: 1.45,
-    marginBottom: 9,
-    paddingLeft: 6,
-    borderLeftWidth: 2,
+    lineHeight: 1.55,
+    marginBottom: 11,
+    paddingLeft: 7,
+    paddingVertical: 3,
+    borderLeftWidth: 2.5,
     borderLeftColor: C.primary,
   },
 
   // Experience
-  expEntry: { marginBottom: 7 },
+  expEntry: { marginBottom: 8 },
   expHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 1,
+    marginBottom: 2,
   },
   expTitleRow: { flexDirection: 'row', alignItems: 'center' },
   expTitle: {
-    fontSize: 8.5,
+    fontSize: 9.5,
     fontFamily: 'Helvetica-Bold',
     color: C.text,
   },
   currentBadge: {
     backgroundColor: C.badgeBg,
     color: C.badgeText,
-    fontSize: 6,
-    paddingHorizontal: 3,
-    paddingVertical: 1,
+    fontSize: 6.5,
+    paddingHorizontal: 4,
+    paddingVertical: 1.5,
     borderRadius: 2,
     fontFamily: 'Helvetica-Bold',
-    marginLeft: 4,
+    marginLeft: 5,
   },
   expPeriod: {
-    fontSize: 7.5,
+    fontSize: 8,
     color: C.muted,
     fontFamily: 'Helvetica-Oblique',
   },
   expCompany: {
-    fontSize: 8,
+    fontSize: 8.5,
     color: C.accent,
-    marginBottom: 3,
+    marginBottom: 4,
     fontFamily: 'Helvetica-Oblique',
   },
 
   // Bullets
-  bulletRow: { flexDirection: 'row', marginBottom: 1.5 },
-  bullet: { fontSize: 8, color: C.muted, marginRight: 3, marginTop: 0.5 },
-  bulletText: { fontSize: 8, color: C.text, flex: 1 },
+  bulletRow: { flexDirection: 'row', marginBottom: 2.5 },
+  bullet: { fontSize: 8.5, color: C.muted, marginRight: 4, marginTop: 1 },
+  bulletText: { fontSize: 8.5, color: C.text, flex: 1, lineHeight: 1.45 },
 
   // Tags
-  tagsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 3, marginTop: 3 },
+  tagsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 4 },
   tag: {
     backgroundColor: C.tagBg,
     color: C.tagText,
-    paddingHorizontal: 4,
-    paddingVertical: 1,
-    borderRadius: 2,
-    fontSize: 7,
+    paddingHorizontal: 5,
+    paddingVertical: 1.5,
+    borderRadius: 3,
+    fontSize: 7.5,
     fontFamily: 'Helvetica-Bold',
   },
 
   // Projects
-  projEntry: { marginBottom: 6 },
+  projEntry: { marginBottom: 7 },
   projHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 1,
+    marginBottom: 3,
   },
   projTitle: {
-    fontSize: 8.5,
+    fontSize: 9,
     fontFamily: 'Helvetica-Bold',
     color: C.text,
   },
   projCategory: {
-    fontSize: 7.5,
+    fontSize: 8,
     color: C.accent,
     fontFamily: 'Helvetica-Oblique',
   },
 
   // Sidebar — Skills
-  skillGroup: { marginBottom: 5 },
+  skillGroup: { marginBottom: 6 },
   skillGroupTitle: {
-    fontSize: 7.5,
+    fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     color: C.text,
-    marginBottom: 1.5,
+    marginBottom: 2,
   },
-  skillItems: { fontSize: 7.5, color: C.muted, lineHeight: 1.4 },
+  skillItems: { fontSize: 8, color: C.muted, lineHeight: 1.5 },
 
   // Sidebar — Education
   eduDegree: {
-    fontSize: 8,
+    fontSize: 8.5,
     fontFamily: 'Helvetica-Bold',
     color: C.text,
-    marginBottom: 1,
+    marginBottom: 2,
   },
   eduInstitution: {
-    fontSize: 7.5,
+    fontSize: 8,
     color: C.accent,
     fontFamily: 'Helvetica-Oblique',
-    marginBottom: 1,
+    marginBottom: 2,
   },
-  eduMeta: { fontSize: 7.5, color: C.muted },
+  eduMeta: { fontSize: 8, color: C.muted },
 
   // Sidebar — Accomplishments
-  accomplishRow: { flexDirection: 'row', marginBottom: 4 },
+  accomplishRow: { flexDirection: 'row', marginBottom: 5 },
   accomplishDot: {
-    fontSize: 8,
+    fontSize: 9,
     color: C.primary,
-    marginRight: 4,
-    marginTop: 0.5,
+    marginRight: 5,
+    marginTop: 1,
   },
   accomplishContent: { flex: 1 },
   accomplishTitle: {
-    fontSize: 7.5,
+    fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     color: C.text,
-    marginBottom: 1,
+    marginBottom: 2,
   },
-  accomplishDesc: { fontSize: 7, color: C.muted, lineHeight: 1.35 },
+  accomplishDesc: { fontSize: 7.5, color: C.muted, lineHeight: 1.45 },
 });
 
 // ─── Single-page content limits ───────────────────────────────────────────────
-// Adjust these numbers if you add more data to portfolio.ts.
+// Tune these if the resume overflows or has too much whitespace.
 const LIMITS = {
-  currentRoleHighlights: 4,   // bullets for the current/most-recent role
-  otherRoleHighlights:   1,   // bullets for older roles
+  currentRoleHighlights: 5,   // bullets for the current/most-recent role
+  otherRoleHighlights:   2,   // bullets for older roles
   projects:              2,   // how many projects to show
   projectHighlights:     2,   // bullets per project
   accomplishments:       4,   // rows in the sidebar
@@ -352,8 +356,8 @@ export default function ResumePDF() {
           </View>
         </View>
 
-        {/* ── Two-column body ── */}
-        <View style={s.body}>
+        {/* ── Two-column body — flexGrow fills remaining page height ── */}
+        <View style={{ ...s.body, flexGrow: 1 }}>
 
           {/* ════ Main column (62%) ════ */}
           <View style={s.mainCol}>
