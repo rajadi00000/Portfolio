@@ -353,6 +353,20 @@ export default function ResumePreviewModal({ open, onClose }: Props) {
       projects: f.projects.filter((_, i) => i !== idx),
     }));
 
+  // Generic reorder — swaps item at `idx` with its neighbour
+  const moveItem = <T,>(
+    key: 'experiences' | 'projects' | 'accomplishments',
+    idx: number,
+    dir: -1 | 1
+  ) =>
+    setFormData(f => {
+      const arr = [...(f[key] as T[])];
+      const to = idx + dir;
+      if (to < 0 || to >= arr.length) return f;
+      [arr[idx], arr[to]] = [arr[to], arr[idx]];
+      return { ...f, [key]: arr };
+    });
+
   const isOpen = (k: string) => openSections.has(k);
 
   return (
@@ -447,6 +461,12 @@ export default function ResumePreviewModal({ open, onClose }: Props) {
                             >
                               <span>{exp.title || 'Untitled'}{exp.company ? ` — ${exp.company}` : ''}</span>
                               <span className="rform__entry-header-actions">
+                                <span className="rform__order-btns">
+                                  <span className="rform__order-btn" role="button" aria-label="Move up"
+                                    onClick={e => { e.stopPropagation(); moveItem('experiences', idx, -1); }}>&#9650;</span>
+                                  <span className="rform__order-btn" role="button" aria-label="Move down"
+                                    onClick={e => { e.stopPropagation(); moveItem('experiences', idx, 1); }}>&#9660;</span>
+                                </span>
                                 <span
                                   className="rform__entry-remove"
                                   role="button"
@@ -491,6 +511,12 @@ export default function ResumePreviewModal({ open, onClose }: Props) {
                             >
                               <span>{proj.title || 'Untitled'}</span>
                               <span className="rform__entry-header-actions">
+                                <span className="rform__order-btns">
+                                  <span className="rform__order-btn" role="button" aria-label="Move up"
+                                    onClick={e => { e.stopPropagation(); moveItem('projects', idx, -1); }}>&#9650;</span>
+                                  <span className="rform__order-btn" role="button" aria-label="Move down"
+                                    onClick={e => { e.stopPropagation(); moveItem('projects', idx, 1); }}>&#9660;</span>
+                                </span>
                                 <span
                                   className="rform__entry-remove"
                                   role="button"
@@ -560,12 +586,20 @@ export default function ResumePreviewModal({ open, onClose }: Props) {
                           <div key={acc.id} className="rform__entry">
                             <div className="rform__entry-header rform__entry-header--static">
                               <span>{acc.title || 'Untitled'}</span>
-                              <span
-                                className="rform__entry-remove"
-                                role="button"
-                                aria-label="Remove accomplishment"
-                                onClick={() => removeAccomp(idx)}
-                              >✕</span>
+                              <span className="rform__entry-header-actions">
+                                <span className="rform__order-btns">
+                                  <span className="rform__order-btn" role="button" aria-label="Move up"
+                                    onClick={() => moveItem('accomplishments', idx, -1)}>&#9650;</span>
+                                  <span className="rform__order-btn" role="button" aria-label="Move down"
+                                    onClick={() => moveItem('accomplishments', idx, 1)}>&#9660;</span>
+                                </span>
+                                <span
+                                  className="rform__entry-remove"
+                                  role="button"
+                                  aria-label="Remove accomplishment"
+                                  onClick={() => removeAccomp(idx)}
+                                >✕</span>
+                              </span>
                             </div>
                             <div className="rform__entry-body">
                               <Field label="Title"       value={acc.title}       onChange={v => upAccomp(idx, 'title', v)} />

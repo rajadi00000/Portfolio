@@ -757,6 +757,33 @@
   flex-shrink: 0;
 }
 
+/* Up / down order buttons */
+.rform__order-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.rform__order-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 14px;
+  font-size: 0.5rem;
+  color: var(--color-text-secondary);
+  border-radius: 2px;
+  cursor: pointer;
+  line-height: 1;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  user-select: none;
+}
+
+.rform__order-btn:hover {
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--color-primary);
+}
+
 /* Inline remove ✕ inside entry header */
 .rform__entry-remove {
   display: flex;
