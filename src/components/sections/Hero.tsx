@@ -187,7 +187,7 @@ const Hero: React.FC = () => {
             <div className="hero__visual-stack">
               <div className="hero__avatar-wrap">
                 <img
-                  src="/profile.png"
+                  src={`${import.meta.env.BASE_URL}profile.png`}
                   alt={`${personal.name} profile photo`}
                   className="hero__avatar-img"
                 />
