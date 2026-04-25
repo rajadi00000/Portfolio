@@ -17,7 +17,24 @@ import {
   Link,
   StyleSheet,
 } from '@react-pdf/renderer';
-import { personal, skills, experiences, projects, education, accomplishments } from '@/data/portfolio';
+import {
+  personal as _personal,
+  skills as _skills,
+  experiences as _experiences,
+  projects as _projects,
+  education as _education,
+  accomplishments as _accomplishments,
+} from '@/data/portfolio';
+import type { PersonalInfo, SkillCategory, Experience, Project, EducationInfo, Accomplishment } from '@/types';
+
+export interface ResumeData {
+  personal: PersonalInfo;
+  skills: SkillCategory[];
+  experiences: Experience[];
+  projects: Project[];
+  education: EducationInfo;
+  accomplishments: Accomplishment[];
+}
 
 // ─── Palette ─────────────────────────────────────────────────────────────────
 const C = {
@@ -284,7 +301,16 @@ function ContactSeparator() {
 }
 
 // ─── Document ─────────────────────────────────────────────────────────────────
-export default function ResumePDF() {
+export default function ResumePDF({ data }: { data?: ResumeData }) {
+  // Use override data if supplied, otherwise fall back to portfolio defaults.
+  // Original portfolio data is never mutated.
+  const personal       = data?.personal       ?? _personal;
+  const skills         = data?.skills         ?? _skills;
+  const experiences    = data?.experiences    ?? _experiences;
+  const projects       = data?.projects       ?? _projects;
+  const education      = data?.education      ?? _education;
+  const accomplishments = data?.accomplishments ?? _accomplishments;
+
   const expItems = experiences.map((exp, i) => ({
     ...exp,
     highlights: exp.highlights.slice(
