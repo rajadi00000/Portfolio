@@ -1443,7 +1443,34 @@ strong {
   color: var(--color-text-muted);
 }
 
-/* ─── 19. Aurora Background ───────────────────────────────────────────────── */
+/* ─── 19. Footer CTA ──────────────────────────────────────────────────────── */
+
+.footer__cta {
+  text-align: center;
+  padding-bottom: var(--space-12);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-8);
+}
+
+.footer__cta-heading {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: var(--space-3);
+}
+
+.footer__cta-sub {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-8);
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+}
+
+/* ─── 20. Aurora Background ───────────────────────────────────────────────── */
 
 .aurora {
   position: fixed;
@@ -1491,7 +1518,7 @@ strong {
   animation-delay: -9s;
 }
 
-/* ─── 20. Hero Typed Role ─────────────────────────────────────────────────── */
+/* ─── 21. Hero Typed Role ─────────────────────────────────────────────────── */
 
 .hero__role-line {
   display: flex;
@@ -1689,6 +1716,180 @@ strong {
   100% { opacity: 1; transform: translateY(0); }
 }
 
+/* ─── 25. Reading Progress Bar ───────────────────────────────────────────── */
+
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  transform-origin: left center;
+  z-index: 1001;
+  pointer-events: none;
+}
+
+/* ─── 26. Cursor Spotlight ────────────────────────────────────────────────── */
+
+.cursor-spotlight {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    700px circle at var(--cx, 50vw) var(--cy, 50vh),
+    rgba(129, 140, 248, 0.045) 0%,
+    transparent 60%
+  );
+  transition: background 0.06s linear;
+}
+
+/* ─── 27. Noise / Grain Overlay ──────────────────────────────────────────── */
+
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* ─── 28. Tech Marquee Strip ──────────────────────────────────────────────── */
+
+.marquee-section {
+  overflow: hidden;
+  padding: var(--space-5) 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  position: relative;
+  z-index: 1;
+}
+
+.marquee__track {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  width: max-content;
+  animation: marquee-scroll 32s linear infinite;
+}
+
+.marquee-section:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+.marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  transition: color var(--transition-fast);
+}
+
+.marquee__item:hover {
+  color: var(--color-primary);
+}
+
+.marquee__sep {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ─── 29. Hero Floating Tech Badges ──────────────────────────────────────── */
+
+.hero__badge {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 5px var(--space-3);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+  z-index: 5;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+}
+
+.hero__badge--swift {
+  background: rgba(254, 84, 54, 0.13);
+  color: #fe5436;
+  border: 1px solid rgba(254, 84, 54, 0.25);
+  top: 6%;
+  right: -4%;
+  animation: float 4s ease-in-out infinite;
+}
+
+.hero__badge--react {
+  background: rgba(96, 165, 250, 0.13);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  bottom: 30%;
+  left: -6%;
+  animation: float 5.5s ease-in-out infinite 1s;
+}
+
+.hero__badge--ai {
+  background: rgba(52, 211, 153, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.25);
+  top: 38%;
+  right: -6%;
+  animation: float 7s ease-in-out infinite 2.2s;
+}
+
+/* ─── 30. Scroll-to-top Button ────────────────────────────────────────────── */
+
+.scroll-top {
+  position: fixed;
+  bottom: var(--space-8);
+  right: var(--space-6);
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-lg);
+  background: var(--gradient-primary);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 20px rgba(129, 140, 248, 0.4);
+  z-index: 500;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.scroll-top:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(129, 140, 248, 0.55);
+}
+
 /* ─── 18. Responsive ──────────────────────────────────────────────────────── */
 
 @media (max-width: 1024px) {
@@ -1772,6 +1973,15 @@ strong {
 
   .aurora__beam--3 {
     display: none;
+  }
+
+  .hero__badge {
+    display: none;
+  }
+
+  .scroll-top {
+    bottom: var(--space-5);
+    right: var(--space-4);
   }
 }
 

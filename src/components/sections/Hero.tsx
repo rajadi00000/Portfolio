@@ -238,14 +238,15 @@ const Hero: React.FC = () => {
               </a>
             </motion.nav>
 
-            {/* <motion.div className="hero__stats" variants={itemVariants} aria-label="Quick stats">
+            {/* Stats bar */}
+            <motion.div className="hero__stats" variants={itemVariants} aria-label="Quick stats">
               {STATS.map(s => (
                 <div key={s.label} className="hero__stat">
                   <span className="hero__stat-value gradient-text">{s.value}</span>
                   <span className="hero__stat-label">{s.label}</span>
                 </div>
               ))}
-            </motion.div> */}
+            </motion.div>
           </motion.div>
 
           {/* ── Right: Profile photo with terminal card behind ── */}
@@ -256,6 +257,11 @@ const Hero: React.FC = () => {
             animate="visible"
           >
             <div className="hero__visual-stack">
+              {/* Floating tech badges */}
+              <span className="hero__badge hero__badge--swift" aria-hidden="true">⬡ Swift</span>
+              <span className="hero__badge hero__badge--react" aria-hidden="true">⚛ React</span>
+              <span className="hero__badge hero__badge--ai" aria-hidden="true">✦ AI</span>
+
               <div className="hero__avatar-wrap">
                 <img
                   src={`${import.meta.env.BASE_URL}profile.png`}

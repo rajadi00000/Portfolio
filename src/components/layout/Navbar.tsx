@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { personal, navLinks } from '@/data/portfolio';
 import useActiveSection from '@/hooks/useActiveSection';
 
@@ -19,6 +19,8 @@ const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const activeSection = useActiveSection(sectionIds);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 40, restDelta: 0.001 });
 
   // Reveal frosted-glass background on scroll
   useEffect(() => {
@@ -62,6 +64,9 @@ const Navbar: React.FC = () => {
 
   return (
     <>
+      {/* Reading progress bar */}
+      <motion.div className="progress-bar" style={{ scaleX }} aria-hidden="true" />
+
       <motion.nav
         className={`navbar${scrolled ? ' navbar--scrolled' : ''}`}
         initial={{ y: -100, opacity: 0 }}

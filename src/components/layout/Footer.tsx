@@ -1,4 +1,4 @@
-import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
+import { FiGithub, FiLinkedin, FiMail, FiArrowRight } from 'react-icons/fi';
 import { personal } from '@/data/portfolio';
 
 const currentYear = new Date().getFullYear();
@@ -6,13 +6,25 @@ const currentYear = new Date().getFullYear();
 /**
  * Footer
  *
- * Site footer with brand name, social icon links, and copyright.
- * Social links open in a new tab with rel="noopener noreferrer".
+ * Site footer with a "Let's build something" CTA, social icon links, and copyright.
  */
 const Footer: React.FC = () => (
   <footer className="footer" role="contentinfo">
     <div className="container">
       <div className="footer__inner">
+
+        {/* ── CTA ── */}
+        <div className="footer__cta">
+          <h2 className="footer__cta-heading gradient-text">Let's build something great.</h2>
+          <p className="footer__cta-sub">
+            Open to full-time roles, freelance projects, and interesting conversations.
+          </p>
+          <a href={`mailto:${personal.email}`} className="btn btn--primary" aria-label="Send an email">
+            Say Hello
+            <FiArrowRight aria-hidden="true" />
+          </a>
+        </div>
+
         <span className="footer__brand">{personal.name}</span>
 
         <nav className="footer__socials" aria-label="Social links">
