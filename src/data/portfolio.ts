@@ -241,3 +241,10 @@ export const navLinks: NavLink[] = [
   { label: 'Projects', href: '#projects' },
   { label: 'Education', href: '#education' },
 ];
+
+// ─── Feature Flags ────────────────────────────────────────────────────────────
+// Toggle individual UI features without touching components.
+
+/** Set VITE_SHOW_RESUME_DOWNLOAD=true in .env.local to show the "↓ Resume" download button in the navbar. */
+export const showResumeDownload: boolean =
+  import.meta.env.VITE_SHOW_RESUME_DOWNLOAD === 'true';
