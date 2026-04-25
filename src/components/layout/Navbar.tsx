@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { personal, navLinks } from '@/data/portfolio';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { personal, navLinks, showResumeDownload } from '@/data/portfolio';
 import useActiveSection from '@/hooks/useActiveSection';
+import ResumePDF from '@/components/ResumePDF';
 
 // Derive section ids from nav links (strip leading '#')
 const sectionIds: string[] = navLinks.map((l) => l.href.slice(1));
@@ -104,10 +106,22 @@ const Navbar: React.FC = () => {
             })}
           </ul>
 
-          {/* Desktop CTA */}
-          <a href={`mailto:${personal.email}`} className="navbar__cta" aria-label="Send an email">
-            Contact
-          </a>
+          {/* Desktop CTA buttons */}
+          <div className="navbar__actions">
+            {showResumeDownload && (
+              <PDFDownloadLink
+                document={<ResumePDF />}
+                fileName={`${personal.name.replace(/\s+/g, '_')}_Resume.pdf`}
+                className="navbar__resume-btn"
+                aria-label="Download resume as PDF"
+              >
+                {({ loading }) => (loading ? 'Generating…' : '↓ Resume')}
+              </PDFDownloadLink>
+            )}
+            <a href={`mailto:${personal.email}`} className="navbar__cta" aria-label="Send an email">
+              Contact
+            </a>
+          </div>
 
           {/* Hamburger toggle (mobile only) */}
           <button
@@ -152,12 +166,30 @@ const Navbar: React.FC = () => {
                 </motion.a>
               );
             })}
+            {showResumeDownload && (
+              <PDFDownloadLink
+                document={<ResumePDF />}
+                fileName={`${personal.name.replace(/\s+/g, '_')}_Resume.pdf`}
+                className="navbar__mobile-resume-btn"
+                aria-label="Download resume as PDF"
+              >
+                {({ loading }) => (
+                  <motion.span
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: navLinks.length * 0.06 }}
+                  >
+                    {loading ? 'Generating…' : '↓ Download Resume'}
+                  </motion.span>
+                )}
+              </PDFDownloadLink>
+            )}
             <motion.a
               href={`mailto:${personal.email}`}
               className="navbar__mobile-cta"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: navLinks.length * 0.06 }}
+              transition={{ delay: (navLinks.length + 1) * 0.06 }}
             >
               Contact Me
             </motion.a>
