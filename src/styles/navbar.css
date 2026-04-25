@@ -742,6 +742,13 @@
   background: rgba(99, 102, 241, 0.13);
 }
 
+.rform__entry-header--static {
+  cursor: default;
+}
+.rform__entry-header--static:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
 /* Entry header right-side actions (remove + chevron) */
 .rform__entry-header-actions {
   display: flex;

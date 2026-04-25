@@ -298,6 +298,21 @@ export default function ResumePreviewModal({ open, onClose }: Props) {
       return { ...f, accomplishments };
     });
 
+  const addAccomp = () =>
+    setFormData(f => ({
+      ...f,
+      accomplishments: [
+        ...f.accomplishments,
+        { id: Date.now(), title: '', description: '', icon: '' },
+      ],
+    }));
+
+  const removeAccomp = (idx: number) =>
+    setFormData(f => ({
+      ...f,
+      accomplishments: f.accomplishments.filter((_, i) => i !== idx),
+    }));
+
   const addExp = () =>
     setFormData(f => {
       const newId = Date.now();
@@ -543,12 +558,24 @@ export default function ResumePreviewModal({ open, onClose }: Props) {
                       <div className="rform__section-body">
                         {formData.accomplishments.map((acc, idx) => (
                           <div key={acc.id} className="rform__entry">
+                            <div className="rform__entry-header rform__entry-header--static">
+                              <span>{acc.title || 'Untitled'}</span>
+                              <span
+                                className="rform__entry-remove"
+                                role="button"
+                                aria-label="Remove accomplishment"
+                                onClick={() => removeAccomp(idx)}
+                              >✕</span>
+                            </div>
                             <div className="rform__entry-body">
                               <Field label="Title"       value={acc.title}       onChange={v => upAccomp(idx, 'title', v)} />
                               <Field label="Description" value={acc.description} onChange={v => upAccomp(idx, 'description', v)} multiline rows={2} />
                             </div>
                           </div>
                         ))}
+                        <button className="rform__add-entry-btn" type="button" onClick={addAccomp}>
+                          + Add accomplishment
+                        </button>
                       </div>
                     )}
                   </div>

@@ -201,12 +201,18 @@ const s = StyleSheet.create({
   tagsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 4 },
   tag: {
     backgroundColor: C.tagBg,
-    color: C.tagText,
     paddingHorizontal: 5,
-    paddingVertical: 1.5,
+    paddingVertical: 2,
     borderRadius: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tagLabel: {
+    color: C.tagText,
     fontSize: 7.5,
     fontFamily: 'Helvetica-Bold',
+    lineHeight: 1,
   },
 
   // Projects
@@ -408,7 +414,9 @@ export default function ResumePDF({ data }: { data?: ResumeData }) {
                   {exp.tags.length > 0 && (
                     <View style={s.tagsRow}>
                       {exp.tags.map((tag) => (
-                        <Text key={tag} style={s.tag}>{tag}</Text>
+                        <View key={tag} style={s.tag}>
+                          <Text style={s.tagLabel}>{tag}</Text>
+                        </View>
                       ))}
                     </View>
                   )}
@@ -429,7 +437,9 @@ export default function ResumePDF({ data }: { data?: ResumeData }) {
                   {proj.tags.length > 0 && (
                     <View style={s.tagsRow}>
                       {proj.tags.map((tag) => (
-                        <Text key={tag} style={s.tag}>{tag}</Text>
+                        <View key={tag} style={s.tag}>
+                          <Text style={s.tagLabel}>{tag}</Text>
+                        </View>
                       ))}
                     </View>
                   )}
