@@ -1,8 +1,53 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiGithub, FiLinkedin, FiMail, FiMapPin, FiArrowRight } from 'react-icons/fi';
 import { personal } from '@/data/portfolio';
 
-// ─── Animation variants ───────────────────────────────────────────────────────
+// ─── Cycling role phrases ─────────────────────────────────────────────────────
+
+const ROLES = ['iOS Engineer', 'Web Developer', 'AI Builder', 'Full-Stack Dev'];
+
+const STATS = [
+  { value: '3.5+', label: 'Years Exp' },
+  { value: '5+', label: 'Projects' },
+  { value: '1', label: 'Companies' },
+];
+
+// ─── Typewriter component ─────────────────────────────────────────────────────
+
+const AnimatedRole: React.FC = () => {
+  const [index, setIndex] = useState(0);
+  const [text, setText] = useState('');
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const word = ROLES[index];
+    let timer: ReturnType<typeof setTimeout>;
+
+    if (!deleting && text === word) {
+      timer = setTimeout(() => setDeleting(true), 1800);
+    } else if (deleting && text === '') {
+      setDeleting(false);
+      setIndex(i => (i + 1) % ROLES.length);
+    } else {
+      const delay = deleting ? 45 : 75;
+      timer = setTimeout(() => {
+        setText(deleting ? word.slice(0, text.length - 1) : word.slice(0, text.length + 1));
+      }, delay);
+    }
+
+    return () => clearTimeout(timer);
+  }, [text, deleting, index]);
+
+  return (
+    <span className="hero__typed" aria-label={`Currently: ${ROLES[index]}`}>
+      {text}
+      <span className="hero__typed-cursor" aria-hidden="true" />
+    </span>
+  );
+};
+
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -69,9 +114,21 @@ const TerminalCard: React.FC = () => (
           <span className="code-bracket">],</span>
         </span>
         <span className="code-line">
+          {'  '}<span className="code-key">experience</span>
+          <span className="code-colon">:</span>{' '}
+          <span className="code-string">"4+ years"</span>
+          <span className="code-bracket">,</span>
+        </span>
+        <span className="code-line">
           {'  '}<span className="code-key">passion</span>
           <span className="code-colon">:</span>{' '}
           <span className="code-string">"Build things that matter"</span>
+          <span className="code-bracket">,</span>
+        </span>
+        <span className="code-line">
+          {'  '}<span className="code-key">status</span>
+          <span className="code-colon">:</span>{' '}
+          <span className="code-string code-string--green">"open to work"</span>
           <span className="code-bracket">,</span>
         </span>
         <span className="code-line">
@@ -124,6 +181,11 @@ const Hero: React.FC = () => {
               {personal.title}
             </motion.p>
 
+            <motion.div className="hero__role-line" variants={itemVariants}>
+              <span className="hero__role-prompt" aria-hidden="true">{'>'}</span>
+              <AnimatedRole />
+            </motion.div>
+
             <motion.p className="hero__summary" variants={itemVariants}>
               {personal.summary}
             </motion.p>
@@ -175,6 +237,15 @@ const Hero: React.FC = () => {
                 <FiMail />
               </a>
             </motion.nav>
+
+            {/* <motion.div className="hero__stats" variants={itemVariants} aria-label="Quick stats">
+              {STATS.map(s => (
+                <div key={s.label} className="hero__stat">
+                  <span className="hero__stat-value gradient-text">{s.value}</span>
+                  <span className="hero__stat-label">{s.label}</span>
+                </div>
+              ))}
+            </motion.div> */}
           </motion.div>
 
           {/* ── Right: Profile photo with terminal card behind ── */}
@@ -201,7 +272,9 @@ const Hero: React.FC = () => {
       </div>
 
       <div className="hero__scroll-indicator" aria-hidden="true">
-        <div className="hero__scroll-arrow" />
+        <div className="hero__scroll-mouse">
+          <div className="hero__scroll-wheel" />
+        </div>
         <span>scroll</span>
       </div>
     </section>

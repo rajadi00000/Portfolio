@@ -18,6 +18,12 @@ import Education from '@/components/sections/Education';
  */
 const App: React.FC = () => (
   <>
+    {/* Ambient aurora beams — fixed, decorative, behind all content */}
+    <div className="aurora" aria-hidden="true">
+      <div className="aurora__beam aurora__beam--1" />
+      <div className="aurora__beam aurora__beam--2" />
+      <div className="aurora__beam aurora__beam--3" />
+    </div>
     <Navbar />
     <main id="main-content">
       <Hero />
