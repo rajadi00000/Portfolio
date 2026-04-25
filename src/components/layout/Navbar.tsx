@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { personal, navLinks } from '@/data/portfolio';
+import { personal, navLinks, showResumeDownload } from '@/data/portfolio';
 import useActiveSection from '@/hooks/useActiveSection';
+import ResumePreviewModal from '@/components/ResumePreviewModal';
 
 // Derive section ids from nav links (strip leading '#')
 const sectionIds: string[] = navLinks.map((l) => l.href.slice(1));
@@ -18,6 +19,7 @@ const sectionIds: string[] = navLinks.map((l) => l.href.slice(1));
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [resumePreviewOpen, setResumePreviewOpen] = useState(false);
   const activeSection = useActiveSection(sectionIds);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 40, restDelta: 0.001 });
@@ -104,10 +106,21 @@ const Navbar: React.FC = () => {
             })}
           </ul>
 
-          {/* Desktop CTA */}
-          <a href={`mailto:${personal.email}`} className="navbar__cta" aria-label="Send an email">
-            Contact
-          </a>
+          {/* Desktop CTA buttons */}
+          <div className="navbar__actions">
+            {showResumeDownload && (
+              <button
+                className="navbar__resume-btn"
+                onClick={() => setResumePreviewOpen(true)}
+                aria-label="Preview and download resume"
+              >
+                ↓ Resume
+              </button>
+            )}
+            <a href={`mailto:${personal.email}`} className="navbar__cta" aria-label="Send an email">
+              Contact
+            </a>
+          </div>
 
           {/* Hamburger toggle (mobile only) */}
           <button
@@ -152,18 +165,37 @@ const Navbar: React.FC = () => {
                 </motion.a>
               );
             })}
+            {showResumeDownload && (
+              <motion.button
+                className="navbar__mobile-resume-btn"
+                onClick={() => { setMenuOpen(false); setResumePreviewOpen(true); }}
+                aria-label="Preview and download resume"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.06 }}
+              >
+                ↓ Download Resume
+              </motion.button>
+            )}
             <motion.a
               href={`mailto:${personal.email}`}
               className="navbar__mobile-cta"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: navLinks.length * 0.06 }}
+              transition={{ delay: (navLinks.length + 1) * 0.06 }}
             >
               Contact Me
             </motion.a>
           </motion.div>
         )}
       </AnimatePresence>
+      {/* Resume preview modal */}
+      {showResumeDownload && (
+        <ResumePreviewModal
+          open={resumePreviewOpen}
+          onClose={() => setResumePreviewOpen(false)}
+        />
+      )}
     </>
   );
 };
