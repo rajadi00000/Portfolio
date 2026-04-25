@@ -27,17 +27,10 @@ const visualVariants = {
   },
 };
 
-// ─── Terminal code card ───────────────────────────────────────────────────────
+// ─── Terminal code card (decorative background) ─────────────────────────────
 
-/**
- * TerminalCard
- *
- * Decorative code-editor card shown on the right side of the Hero.
- * Syntax highlighting is achieved with CSS classes — no external library.
- */
 const TerminalCard: React.FC = () => (
   <div className="terminal-card" role="img" aria-label="Code snippet about the developer">
-    {/* macOS window chrome */}
     <div className="terminal-card__topbar">
       <span className="terminal-card__dot terminal-card__dot--red"    aria-hidden="true" />
       <span className="terminal-card__dot terminal-card__dot--yellow" aria-hidden="true" />
@@ -73,25 +66,6 @@ const TerminalCard: React.FC = () => (
           <span className="code-string">"Web"</span>
           <span className="code-bracket">, </span>
           <span className="code-string">"AI"</span>
-          <span className="code-bracket">],</span>
-        </span>
-        <span className="code-line">
-          {'  '}<span className="code-key">company</span>
-          <span className="code-colon">:</span>{' '}
-          <span className="code-string">"Adidas"</span>
-          <span className="code-bracket">,</span>
-        </span>
-        <span className="code-line">
-          {'  '}<span className="code-key">experience</span>
-          <span className="code-colon">:</span>{' '}
-          <span className="code-string">"3.5+ years"</span>
-          <span className="code-bracket">,</span>
-        </span>
-        <span className="code-line">
-          {'  '}<span className="code-key">awards</span>
-          <span className="code-colon">:</span>{' '}
-          <span className="code-bracket">[</span>
-          <span className="code-string">"Q-Superstar"</span>
           <span className="code-bracket">],</span>
         </span>
         <span className="code-line">
@@ -203,14 +177,25 @@ const Hero: React.FC = () => {
             </motion.nav>
           </motion.div>
 
-          {/* ── Right: Visual decoration ── */}
+          {/* ── Right: Profile photo with terminal card behind ── */}
           <motion.div
             className="hero__visual"
             variants={visualVariants}
             initial="hidden"
             animate="visible"
           >
-            <TerminalCard />
+            <div className="hero__visual-stack">
+              <div className="hero__avatar-wrap">
+                <img
+                  src="/profile.png"
+                  alt={`${personal.name} profile photo`}
+                  className="hero__avatar-img"
+                />
+              </div>
+              <div className="hero__visual-card" aria-hidden="true">
+                <TerminalCard />
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>
