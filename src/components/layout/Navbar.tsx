@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import { personal, navLinks, showResumeDownload } from '@/data/portfolio';
 import useActiveSection from '@/hooks/useActiveSection';
-import ResumePDF from '@/components/ResumePDF';
+import ResumePreviewModal from '@/components/ResumePreviewModal';
 
 // Derive section ids from nav links (strip leading '#')
 const sectionIds: string[] = navLinks.map((l) => l.href.slice(1));
@@ -20,6 +19,7 @@ const sectionIds: string[] = navLinks.map((l) => l.href.slice(1));
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [resumePreviewOpen, setResumePreviewOpen] = useState(false);
   const activeSection = useActiveSection(sectionIds);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 40, restDelta: 0.001 });
@@ -109,14 +109,13 @@ const Navbar: React.FC = () => {
           {/* Desktop CTA buttons */}
           <div className="navbar__actions">
             {showResumeDownload && (
-              <PDFDownloadLink
-                document={<ResumePDF />}
-                fileName={`${personal.name.replace(/\s+/g, '_')}_Resume.pdf`}
+              <button
                 className="navbar__resume-btn"
-                aria-label="Download resume as PDF"
+                onClick={() => setResumePreviewOpen(true)}
+                aria-label="Preview and download resume"
               >
-                {({ loading }) => (loading ? 'Generating…' : '↓ Resume')}
-              </PDFDownloadLink>
+                ↓ Resume
+              </button>
             )}
             <a href={`mailto:${personal.email}`} className="navbar__cta" aria-label="Send an email">
               Contact
@@ -167,22 +166,16 @@ const Navbar: React.FC = () => {
               );
             })}
             {showResumeDownload && (
-              <PDFDownloadLink
-                document={<ResumePDF />}
-                fileName={`${personal.name.replace(/\s+/g, '_')}_Resume.pdf`}
+              <motion.button
                 className="navbar__mobile-resume-btn"
-                aria-label="Download resume as PDF"
+                onClick={() => { setMenuOpen(false); setResumePreviewOpen(true); }}
+                aria-label="Preview and download resume"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.06 }}
               >
-                {({ loading }) => (
-                  <motion.span
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: navLinks.length * 0.06 }}
-                  >
-                    {loading ? 'Generating…' : '↓ Download Resume'}
-                  </motion.span>
-                )}
-              </PDFDownloadLink>
+                ↓ Download Resume
+              </motion.button>
             )}
             <motion.a
               href={`mailto:${personal.email}`}
@@ -196,6 +189,13 @@ const Navbar: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* Resume preview modal */}
+      {showResumeDownload && (
+        <ResumePreviewModal
+          open={resumePreviewOpen}
+          onClose={() => setResumePreviewOpen(false)}
+        />
+      )}
     </>
   );
 };
