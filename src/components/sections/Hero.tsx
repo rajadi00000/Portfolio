@@ -239,14 +239,14 @@ const Hero: React.FC = () => {
             </motion.nav>
 
             {/* Stats bar */}
-            <motion.div className="hero__stats" variants={itemVariants} aria-label="Quick stats">
+            {/* <motion.div className="hero__stats" variants={itemVariants} aria-label="Quick stats">
               {STATS.map(s => (
                 <div key={s.label} className="hero__stat">
                   <span className="hero__stat-value gradient-text">{s.value}</span>
                   <span className="hero__stat-label">{s.label}</span>
                 </div>
               ))}
-            </motion.div>
+            </motion.div> */}
           </motion.div>
 
           {/* ── Right: Profile photo with terminal card behind ── */}
