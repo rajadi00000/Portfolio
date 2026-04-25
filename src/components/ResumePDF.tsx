@@ -55,7 +55,7 @@ const s = StyleSheet.create({
   page: {
     fontFamily: 'Helvetica',
     backgroundColor: '#FFFFFF',
-    paddingTop: 32,
+    paddingTop: 20,
     paddingBottom: 28,
     paddingHorizontal: 36,
     fontSize: 9,
@@ -73,7 +73,7 @@ const s = StyleSheet.create({
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
     marginBottom: 5,
   },
   name: {
@@ -100,7 +100,6 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    marginTop: 8,
   },
   contactSep: {
     fontSize: 8,
@@ -123,9 +122,9 @@ const s = StyleSheet.create({
     gap: 18,
     flexGrow: 1,
   },
-  mainCol: { flex: 62 },
+  mainCol: { flex: 70 },
   sideCol: {
-    flex: 36,
+    flex: 28,
     borderLeftWidth: 0.75,
     borderLeftColor: C.border,
     paddingLeft: 14,
@@ -382,15 +381,15 @@ export default function ResumePDF({ data }: { data?: ResumeData }) {
           </View>
         </View>
 
+        {personal.summary && (
+          <Text style={s.summary}>{personal.summary}</Text>
+        )}
+
         {/* ── Two-column body — flexGrow fills remaining page height ── */}
         <View style={{ ...s.body, flexGrow: 1 }}>
 
           {/* ════ Main column (62%) ════ */}
           <View style={s.mainCol}>
-
-            {personal.summary && (
-              <Text style={s.summary}>{personal.summary}</Text>
-            )}
 
             {/* Work Experience */}
             <View style={s.section}>
