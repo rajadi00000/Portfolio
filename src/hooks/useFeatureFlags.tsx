@@ -44,8 +44,9 @@ const ENV_FLAGS: FeatureFlags = {
   showContactForm:     envBool(import.meta.env.VITE_showContactForm,     false),
 };
 
-// Remote JSON endpoint — set VITE_FEATURE_FLAGS_URL to a public Gist raw URL.
-// e.g. https://gist.githubusercontent.com/<user>/<gist-id>/raw/flags.json
+// Remote Gist API endpoint — set VITE_FEATURE_FLAGS_URL to enable runtime feature flags.
+// Format: https://api.github.com/gists/<gist-id>
+// The API always returns the latest content; commit hash never changes.
 const FLAGS_URL = import.meta.env.VITE_FEATURE_FLAGS_URL as string | undefined;
 
 // ── Context ───────────────────────────────────────────────────────────────────
@@ -62,13 +63,24 @@ export function FeatureFlagsProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!FLAGS_URL) return;
     const controller = new AbortController();
-    fetch(FLAGS_URL, { signal: controller.signal })
+    fetch(FLAGS_URL, { signal: controller.signal, cache: 'no-store' })
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json() as Promise<Partial<FeatureFlags>>;
+        return res.json() as Promise<{ files?: Record<string, { content: string }> }>;
       })
-      // Remote keys win; cast is safe — the endpoint is expected to return valid flag values.
-      .then((remote) => setFlags({ ...ENV_FLAGS, ...(remote as FeatureFlags) }))
+      .then((data) => {
+        // Gist API response: { files: { "filename": { content: "..." } } }
+        if (data.files) {
+          for (const file of Object.values(data.files)) {
+            try {
+              const parsed = JSON.parse(file.content) as Partial<FeatureFlags>;
+              setFlags({ ...ENV_FLAGS, ...(parsed as FeatureFlags) });
+              return;
+            } catch {}
+          }
+        }
+        console.warn('[FeatureFlags] No valid JSON file in Gist response.');
+      })
       .catch((err) => {
         if (err.name !== 'AbortError') {
           console.warn('[FeatureFlags] Remote fetch failed; using env/defaults.', err);
