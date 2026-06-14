@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { personal, navLinks, showResumeDownload } from '@/data/portfolio';
+import { personal, navLinks } from '@/data/portfolio';
 import useActiveSection from '@/hooks/useActiveSection';
+import { useFeatureFlags } from '@/hooks/useFeatureFlags';
 import ResumePreviewModal from '@/components/ResumePreviewModal';
 
 // Derive section ids from nav links (strip leading '#')
@@ -23,6 +24,13 @@ const Navbar: React.FC = () => {
   const activeSection = useActiveSection(sectionIds);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 40, restDelta: 0.001 });
+  const { showResumePDF, showResumeDocx, showContactForm, showProjects } = useFeatureFlags();
+  const showResumeBtn = showResumePDF || showResumeDocx;
+  // Hide flagged nav links dynamically
+  const visibleLinks = navLinks.filter(({ href }) => {
+    if (href === '#projects' && !showProjects) return false;
+    return true;
+  });
 
   // Reveal frosted-glass background on scroll
   useEffect(() => {
@@ -89,7 +97,7 @@ const Navbar: React.FC = () => {
 
           {/* Desktop links */}
           <ul className="navbar__links" role="list">
-            {navLinks.map(({ label, href }) => {
+            {visibleLinks.map(({ label, href }) => {
               const isActive = activeSection === href.slice(1);
               return (
                 <li key={href}>
@@ -108,7 +116,7 @@ const Navbar: React.FC = () => {
 
           {/* Desktop CTA buttons */}
           <div className="navbar__actions">
-            {showResumeDownload && (
+            {showResumeBtn && (
               <button
                 className="navbar__resume-btn"
                 onClick={() => setResumePreviewOpen(true)}
@@ -117,9 +125,11 @@ const Navbar: React.FC = () => {
                 ↓ Resume
               </button>
             )}
-            <a href={`mailto:${personal.email}`} className="navbar__cta" aria-label="Send an email">
-              Contact
-            </a>
+            {showContactForm && (
+              <a href={`mailto:${personal.email}`} className="navbar__cta" aria-label="Send an email">
+                Contact
+              </a>
+            )}
           </div>
 
           {/* Hamburger toggle (mobile only) */}
@@ -149,7 +159,7 @@ const Navbar: React.FC = () => {
             aria-modal="true"
             aria-label="Navigation menu"
           >
-            {navLinks.map(({ label, href }, index) => {
+            {visibleLinks.map(({ label, href }, index) => {
               const isActive = activeSection === href.slice(1);
               return (
                 <motion.a
@@ -165,32 +175,34 @@ const Navbar: React.FC = () => {
                 </motion.a>
               );
             })}
-            {showResumeDownload && (
+            {showResumeBtn && (
               <motion.button
                 className="navbar__mobile-resume-btn"
                 onClick={() => { setMenuOpen(false); setResumePreviewOpen(true); }}
                 aria-label="Preview and download resume"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navLinks.length * 0.06 }}
+                transition={{ delay: visibleLinks.length * 0.06 }}
               >
                 ↓ Download Resume
               </motion.button>
             )}
-            <motion.a
-              href={`mailto:${personal.email}`}
-              className="navbar__mobile-cta"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: (navLinks.length + 1) * 0.06 }}
-            >
-              Contact Me
-            </motion.a>
+            {showContactForm && (
+              <motion.a
+                href={`mailto:${personal.email}`}
+                className="navbar__mobile-cta"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: (visibleLinks.length + 1) * 0.06 }}
+              >
+                Contact Me
+              </motion.a>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
       {/* Resume preview modal */}
-      {showResumeDownload && (
+      {showResumeBtn && (
         <ResumePreviewModal
           open={resumePreviewOpen}
           onClose={() => setResumePreviewOpen(false)}

@@ -3,7 +3,16 @@
  *
  * Update this file to customise what is displayed on the site.
  * No component changes are needed for content edits.
+ *
+ * Version history:
+ *   1.0.0 — Initial release
  */
+
+/** Semantic version of this portfolio data file. Bump when content changes. */
+export const PORTFOLIO_VERSION = '1.0.0';
+
+/** ISO 8601 date of the last content update. */
+export const PORTFOLIO_LAST_UPDATED = '2026-06-14';
 
 import type {
   PersonalInfo,
@@ -50,7 +59,10 @@ export const skills: SkillCategory[] = [
     color: 'orange',
     items: [
       'iOS App Development',
+      'SwiftUI',
       'UIKit',
+      'MVVM',
+      'AVFoundation',
       'BLE Integration',
       'UIImagePickerController',
       'UIActivityViewController',
@@ -69,12 +81,12 @@ export const skills: SkillCategory[] = [
   {
     category: 'Backend & Infra',
     color: 'yellow',
-    items: ['Docker', 'REST APIs', 'CI/CD fundamentals'],
+    items: ['Docker', 'REST APIs', 'OAuth2', 'CI/CD', 'Jenkins', 'Fastlane'],
   },
   {
     category: 'Tools & Platforms',
     color: 'violet',
-    items: ['Xcode', 'Git / GitHub', 'Docker', 'Figma', 'Jira'],
+    items: ['Xcode', 'Git / GitHub', 'Docker', 'Figma', 'Jira', 'Jenkins', 'Fastlane'],
   },
   {
     category: 'Soft Skills',
@@ -94,10 +106,27 @@ export const skills: SkillCategory[] = [
 export const experiences: Experience[] = [
   {
     id: 1,
-    title: 'Software Engineer',
-    company: 'Adidas — India Tech Hub',
-    period: 'Jan 2025 – Present',
+    title: 'iOS Developer',
+    company: 'adidas - Harmony iOS',
+    period: 'Mar 2026 - Present',
     current: true,
+    highlights: [
+      'Led development and launch of the adiClub Membership experience, enabling store associates worldwide to identify, enroll, and engage loyalty members without leaving the Harmony app.',
+      'Built the end-to-end membership workflow using SwiftUI, Swift 5.9, and MVVM — covering member lookup, registration, invitation management, and QR-based identification for thousands of retail associates.',
+      'Integrated native AVFoundation QR scanning to replace manual member-ID entry, improving lookup speed and reducing input errors during customer onboarding.',
+      'Designed and developed the Raffles & Events platform from the ground up, allowing associates to discover, promote, and manage adidas campaign participation directly from mobile devices.',
+      'Owned end-to-end integration with adidas membership services, implementing secure OAuth2-backed service layers with resilient authentication and edge-case handling.',
+      'Improved engineering productivity by co-creating AI-assisted development workflows that transformed feature specs and designs into implementation-ready code.',
+      'Delivered production-ready software through analytics instrumentation, accessibility compliance, responsive iPhone/iPad experiences, and automated CI/CD pipelines using Jenkins and Fastlane.',
+    ],
+    tags: ['SwiftUI', 'Swift', 'MVVM', 'AVFoundation', 'OAuth2', 'Jenkins', 'Fastlane', 'iOS'],
+  },
+  {
+    id: 2,
+    title: 'Software Engineer',
+    company: 'Adidas - India Tech Hub',
+    period: 'Jan 2025 - Feb 2026',
+    current: false,
     highlights: [
       'Contributed to enterprise architecture and innovation within the R&D Hub, building internal digital platforms and scalable software solutions.',
       'Developed native iOS applications and frontend web solutions for internal and consumer-facing use cases.',
@@ -110,7 +139,7 @@ export const experiences: Experience[] = [
     tags: ['iOS', 'Swift', 'React', 'Generative AI', 'BLE', 'TypeScript'],
   },
   {
-    id: 2,
+    id: 3,
     title: 'Junior Software Engineer',
     company: 'Adidas',
     period: 'Jun 2022 - Dec 2024',

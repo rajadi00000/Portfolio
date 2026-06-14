@@ -82,6 +82,25 @@ export interface NavLink {
   href: string;
 }
 
+// ─── Versioning ───────────────────────────────────────────────────────────────
+
+/**
+ * A complete, static snapshot of portfolio content at a given version.
+ * `personal` is included as a static record (env-var overrides are runtime-only).
+ */
+export interface PortfolioSnapshot {
+  version: string;
+  /** ISO 8601 date this snapshot was taken */
+  date: string;
+  personal: PersonalInfo;
+  skills: SkillCategory[];
+  experiences: Experience[];
+  projects: Project[];
+  accomplishments: Accomplishment[];
+  education: EducationInfo;
+  navLinks: NavLink[];
+}
+
 // ─── Animation return types ───────────────────────────────────────────────────
 
 import type { Variants } from 'framer-motion';

@@ -10,6 +10,7 @@ import Experience from '@/components/sections/Experience';
 import Projects from '@/components/sections/Projects';
 import Accomplishments from '@/components/sections/Accomplishments';
 import Education from '@/components/sections/Education';
+import { useFeatureFlags } from '@/hooks/useFeatureFlags';
 
 const TECH = [
   'Swift', 'UIKit', 'SwiftUI', 'React', 'TypeScript', 'CSS3', 'SCSS',
@@ -24,6 +25,7 @@ const TECH = [
  * Navbar → Hero → TechMarquee → About → Skills → Experience → Projects → Accomplishments → Education → Footer
  */
 const App: React.FC = () => {
+  const { showProjects, showAccomplishments } = useFeatureFlags();
   const [showTop, setShowTop] = useState(false);
 
   /** Track mouse position as CSS custom properties for the cursor spotlight */
@@ -79,8 +81,8 @@ const App: React.FC = () => {
         <About />
         <Skills />
         <Experience />
-        <Projects />
-        <Accomplishments />
+        {showProjects && <Projects />}
+        {showAccomplishments && <Accomplishments />}
         <Education />
       </main>
 

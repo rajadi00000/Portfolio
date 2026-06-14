@@ -11,7 +11,9 @@ import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
 import ResumePDF from '@/components/ResumePDF';
-import type { ResumeData } from '@/components/ResumePDF';
+import { downloadDocx } from '@/components/ResumeDocx';
+import { useFeatureFlags } from '@/hooks/useFeatureFlags';
+import type { ResumeData, TemplateId } from '@/components/ResumePDF';
 import {
   personal as _personal,
   skills as _skills,
@@ -141,7 +143,67 @@ function BulletEditor({ items, onChange }: { items: string[]; onChange(items: st
     </div>
   );
 }
+// ── Template picker ──────────────────────────────────────────────────────────────
+const TEMPLATES: { id: TemplateId; name: string; desc: string }[] = [
+  { id: 'modern',  name: 'Modern',  desc: 'Two-column with sidebar' },
+  { id: 'classic', name: 'Classic', desc: 'Centered header, flanked sections' },
+  { id: 'minimal', name: 'Minimal', desc: 'Clean bold section headers' },
+];
 
+function TemplatePicker({
+  selected,
+  onChange,
+}: {
+  selected: TemplateId;
+  onChange: (t: TemplateId) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const h = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
+  }, [open]);
+
+  return (
+    <div className="template-picker" ref={ref}>
+      <button
+        className="template-picker__btn"
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        title="Change resume template"
+        aria-label="Change resume template"
+        aria-expanded={open}
+      >
+        <span className="template-picker__icon">◫</span>
+      </button>
+      {open && (
+        <div className="template-picker__popover" role="menu">
+          <span className="template-picker__heading">Template</span>
+          {TEMPLATES.map(t => (
+            <button
+              key={t.id}
+              className={`template-picker__option${selected === t.id ? ' template-picker__option--active' : ''}`}
+              type="button"
+              role="menuitem"
+              onClick={() => { onChange(t.id); setOpen(false); }}
+            >
+              <div className="template-picker__option-info">
+                <span className="template-picker__option-name">{t.name}</span>
+                <span className="template-picker__option-desc">{t.desc}</span>
+              </div>
+              {selected === t.id && <span className="template-picker__check">✓</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 // ── Resume skeleton loader ────────────────────────────────────────────────────
 function ResumeLoader() {
   return (
@@ -187,9 +249,12 @@ function ResumeLoader() {
 
 // ─── Modal ───────────────────────────────────────────────────────────────────
 export default function ResumePreviewModal({ open, onClose }: Props) {
-  const [formData, setFormData]   = useState<FormState>(buildInitialForm);
-  const [pdfLoaded, setPdfLoaded] = useState(false);
+  const [formData, setFormData]     = useState<FormState>(buildInitialForm);
+  const [pdfLoaded, setPdfLoaded]   = useState(false);
+  const [docxLoading, setDocxLoading] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>('modern');
   const viewerRef = useRef<HTMLDivElement>(null);
+  const { showResumePDF, showResumeDocx } = useFeatureFlags();
 
   // Per-section accordion open/close
   const [openSections, setOpenSections] = useState<Set<string>>(
@@ -206,13 +271,24 @@ export default function ResumePreviewModal({ open, onClose }: Props) {
     return () => clearTimeout(t);
   }, [formData]);
 
-  const resumeData = useMemo(() => formToResumeData(debouncedForm), [debouncedForm]);
-  const fileName   = `${formData.personal.name.replace(/\s+/g, '_')}_Resume.pdf`;
+  const resumeData  = useMemo(() => formToResumeData(debouncedForm), [debouncedForm]);
+  const fileName    = `${formData.personal.name.replace(/\s+/g, '_')}_Resume.pdf`;
+  const docxFileName = `${formData.personal.name.replace(/\s+/g, '_')}_Resume.docx`;
 
   const reset = useCallback(() => setFormData(buildInitialForm()), []);
 
-  // Reset loaded state each time modal opens
+  const handleDocxDownload = useCallback(async () => {
+    setDocxLoading(true);
+    try {
+      await downloadDocx(formToResumeData(formData), selectedTemplate, docxFileName);
+    } finally {
+      setDocxLoading(false);
+    }
+  }, [formData, selectedTemplate, docxFileName]);
+
+  // Reset loaded state each time modal opens or template changes
   useEffect(() => { if (open) setPdfLoaded(false); }, [open]);
+  useEffect(() => { setPdfLoaded(false); }, [selectedTemplate]);
 
   // Attach load listener to the inner iframe
   useEffect(() => {
@@ -395,14 +471,28 @@ export default function ResumePreviewModal({ open, onClose }: Props) {
             <div className="resume-modal__header">
               <span className="resume-modal__title">Resume Preview</span>
               <div className="resume-modal__header-actions">
-                <PDFDownloadLink
-                  document={<ResumePDF data={resumeData} />}
-                  fileName={fileName}
-                  className="resume-modal__download-btn"
-                  aria-label="Download resume as PDF"
-                >
-                  {({ loading }) => (loading ? 'Generating…' : '↓ Download PDF')}
-                </PDFDownloadLink>
+                <TemplatePicker selected={selectedTemplate} onChange={setSelectedTemplate} />
+                {showResumeDocx && (
+                  <button
+                    className="resume-modal__download-btn resume-modal__download-btn--docx"
+                    onClick={handleDocxDownload}
+                    disabled={docxLoading}
+                    aria-label="Download resume as DOCX"
+                    title="Download as Word document (.docx)"
+                  >
+                    {docxLoading ? 'Generating…' : '↓ Download DOCX'}
+                  </button>
+                )}
+                {showResumePDF && (
+                  <PDFDownloadLink
+                    document={<ResumePDF data={resumeData} template={selectedTemplate} />}
+                    fileName={fileName}
+                    className="resume-modal__download-btn"
+                    aria-label="Download resume as PDF"
+                  >
+                    {({ loading }) => (loading ? 'Generating…' : '↓ Download PDF')}
+                  </PDFDownloadLink>
+                )}
                 <button className="resume-modal__close-btn" onClick={onClose} aria-label="Close preview">
                   ✕
                 </button>
@@ -617,24 +707,33 @@ export default function ResumePreviewModal({ open, onClose }: Props) {
                 </div>{/* /rform */}
               </div>{/* /form-col */}
 
-              {/* ══ Right: PDF viewer ══ */}
+              {/* ══ Right: PDF viewer (shown only when showResumePDF is enabled) ══ */}
               <div className="resume-modal__viewer-col" ref={viewerRef}>
-                <AnimatePresence>
-                  {!pdfLoaded && (
-                    <motion.div
-                      className="resume-modal__loader-wrap"
-                      initial={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      <ResumeLoader />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <PDFViewer width="100%" height="100%" showToolbar={false}>
-                  <ResumePDF data={resumeData} />
-                </PDFViewer>
+                {showResumePDF ? (
+                  <>
+                    <AnimatePresence>
+                      {!pdfLoaded && (
+                        <motion.div
+                          className="resume-modal__loader-wrap"
+                          initial={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.4 }}
+                        >
+                          <ResumeLoader />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <PDFViewer width="100%" height="100%" showToolbar={false}>
+                      <ResumePDF data={resumeData} template={selectedTemplate} />
+                    </PDFViewer>
+                  </>
+                ) : (
+                  <div className="resume-modal__pdf-disabled">
+                    <span className="resume-modal__pdf-disabled-icon">⬇</span>
+                    <p>PDF preview is disabled.</p>
+                    {showResumeDocx && <p>Use <strong>Download DOCX</strong> to export your resume.</p>}
+                  </div>
+                )}
               </div>
 
             </div>{/* /body */}

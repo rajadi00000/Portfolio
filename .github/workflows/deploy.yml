@@ -62,7 +62,7 @@ jobs:
           VITE_PHONE:     ${{ vars.VITE_PHONE }}
           VITE_LINKEDIN:  ${{ vars.VITE_LINKEDIN }}
           VITE_GITHUB:    ${{ vars.VITE_GITHUB }}
-          VITE_SHOW_RESUME_DOWNLOAD: ${{ vars.VITE_SHOW_RESUME_DOWNLOAD }}
+          VITE_FEATURE_FLAGS_URL: ${{ vars.VITE_FEATURE_FLAGS_URL }}
         run: npm run build
 
       # 6. Deploy the dist/ folder to the gh-pages branch

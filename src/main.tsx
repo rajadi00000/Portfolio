@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles/globals.css';
 import App from './App';
+import { FeatureFlagsProvider } from './hooks/useFeatureFlags';
 
 /**
  * Application entry point.
@@ -15,6 +16,8 @@ if (!root) {
 
 createRoot(root).render(
   <StrictMode>
-    <App />
+    <FeatureFlagsProvider>
+      <App />
+    </FeatureFlagsProvider>
   </StrictMode>
 );
